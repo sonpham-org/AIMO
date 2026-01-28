@@ -1,0 +1,11 @@
+vllm
+transformers
+pandas
+polars
+openai
+jupyter_client
+ipykernel
+trl
+# openai_harmony and kaggle_evaluation might need to be installed from local sources or specific repositories
+# if they are not on PyPI. 
+# Including them as placeholders or assuming they are available in the target environment.
