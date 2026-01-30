@@ -2,24 +2,37 @@
 """
 Example: Run DeepSeek-R1-Distill-Llama-70B-AWQ on AMD Strix Halo via vLLM.
 
+Requires:
+    - Python 3.12 venv at .venv/ (created with uv)
+    - vLLM 0.15.0+rocm700 wheel
+    - TheRock SDK at /tmp/therock-sdk/ (ROCm 7.x runtime libs)
+    - libmpi_cxx.so.40 stub at /tmp/ (OpenMPI 5.x compat shim)
+
 Usage:
-    python example.py
-    python example.py --model "Valdemardi/DeepSeek-R1-Distill-Llama-70B-AWQ"
-    python example.py --model "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B" --dtype float16
-    python example.py --prompt "Prove that sqrt(2) is irrational."
+    .venv/bin/python example.py
+    .venv/bin/python example.py --model "facebook/opt-125m" --max-model-len 512
+    .venv/bin/python example.py --model "Valdemardi/DeepSeek-R1-Distill-Llama-70B-AWQ"
+    .venv/bin/python example.py --prompt "Prove that sqrt(2) is irrational."
 """
 
 import os
 import sys
+import time
 import argparse
 
-# ── AMD Strix Halo (gfx1151/gfx1105) environment ──────────────────────────
+# ── AMD Strix Halo (gfx1151) environment ─────────────────────────────────
 # These must be set BEFORE importing torch/vllm.
-os.environ.setdefault("HSA_OVERRIDE_GFX_VERSION", "11.0.0")
+os.environ.setdefault("HSA_OVERRIDE_GFX_VERSION", "11.5.1")
 os.environ.setdefault("VLLM_TARGET_DEVICE", "rocm")
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 # Suppress harmless amdgpu.ids warning
 os.environ.setdefault("AMD_LOG_LEVEL", "0")
+# TheRock SDK library paths (needed for ROCm 7.0 runtime + amdsmi)
+for lib_dir in ["/tmp/amdsmi-lib", "/tmp/therock-sdk/lib", "/tmp"]:
+    if os.path.isdir(lib_dir):
+        ld = os.environ.get("LD_LIBRARY_PATH", "")
+        if lib_dir not in ld:
+            os.environ["LD_LIBRARY_PATH"] = f"{lib_dir}:{ld}" if ld else lib_dir
 
 from vllm import LLM, SamplingParams
 
@@ -76,6 +89,25 @@ def parse_args():
     return parser.parse_args()
 
 
+def print_perf_summary(label, outputs, elapsed, prompt_tokens):
+    """Print performance metrics for a generation run."""
+    total_gen_tokens = sum(len(o.outputs[0].token_ids) for o in outputs)
+    gen_tok_per_sec = total_gen_tokens / elapsed if elapsed > 0 else 0
+    total_tokens = prompt_tokens + total_gen_tokens
+    print(f"\n{'─' * 50}")
+    print(f"  {label}")
+    print(f"{'─' * 50}")
+    print(f"  Prompt tokens:      {prompt_tokens}")
+    print(f"  Generated tokens:   {total_gen_tokens}")
+    print(f"  Total tokens:       {total_tokens}")
+    print(f"  Wall time:          {elapsed:.2f} s")
+    print(f"  Generation speed:   {gen_tok_per_sec:.2f} tok/s")
+    if prompt_tokens > 0:
+        # Rough TTFT is hard to measure with offline API; report overall instead
+        print(f"  Overall throughput: {total_tokens / elapsed:.2f} tok/s (prompt + gen)")
+    print(f"{'─' * 50}")
+
+
 def run_one_shot(args):
     """Load model and run a single prompt."""
     print(f"Loading model: {args.model}")
@@ -83,6 +115,7 @@ def run_one_shot(args):
     print(f"max_model_len={args.max_model_len}")
     print()
 
+    t_load_start = time.perf_counter()
     llm = LLM(
         model=args.model,
         dtype=args.dtype,
@@ -93,6 +126,8 @@ def run_one_shot(args):
         trust_remote_code=True,
         enforce_eager=True,  # More compatible on RDNA GPUs
     )
+    t_load = time.perf_counter() - t_load_start
+    print(f"\nModel loaded in {t_load:.2f} s")
 
     sampling_params = SamplingParams(
         temperature=args.temperature,
@@ -100,16 +135,31 @@ def run_one_shot(args):
         top_p=0.95,
     )
 
-    print(f"Prompt: {args.prompt}\n")
+    # --- Warmup run (short) ---
+    print("\nWarmup run...")
+    warmup_params = SamplingParams(temperature=0, max_tokens=8)
+    t_warmup_start = time.perf_counter()
+    llm.generate(["Hi"], warmup_params)
+    t_warmup = time.perf_counter() - t_warmup_start
+    print(f"Warmup done in {t_warmup:.2f} s")
+
+    # --- Main generation ---
+    print(f"\nPrompt: {args.prompt}\n")
     print("=" * 60)
 
+    prompt_token_ids = llm.get_tokenizer().encode(args.prompt)
+    prompt_tokens = len(prompt_token_ids)
+
+    t_gen_start = time.perf_counter()
     outputs = llm.generate([args.prompt], sampling_params)
+    t_gen = time.perf_counter() - t_gen_start
 
     for output in outputs:
         generated_text = output.outputs[0].text
         print(generated_text)
-        print("=" * 60)
-        print(f"\nTokens generated: {len(output.outputs[0].token_ids)}")
+    print("=" * 60)
+
+    print_perf_summary("Performance", outputs, t_gen, prompt_tokens)
 
 
 def run_server(args):
