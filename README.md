@@ -165,12 +165,48 @@ LD_LIBRARY_PATH=/tmp:/tmp/amdsmi-lib:/tmp/therock-sdk/lib \
 | `LD_LIBRARY_PATH` | `/tmp:/tmp/amdsmi-lib:/tmp/therock-sdk/lib` | MPI stub + amdsmi + ROCm 7.x runtime |
 | `VLLM_TARGET_DEVICE` | `rocm` | Force vLLM to use ROCm backend |
 
-### Performance (Strix Halo, 68.7 GB VRAM, DDR5-8000)
+### Performance (Strix Halo, 68.7 GB VRAM, LPDDR5X-8000, ~215 GB/s bandwidth)
 
-| Model | VRAM | Speed |
-|---|---|---|
-| OPT-125M (test) | 0.25 GiB | ~260 tok/s |
-| DeepSeek-R1-70B-AWQ | 37.3 GiB | ~2.6 tok/s |
+#### vLLM (0.15.0+rocm700)
+
+| Model | Quant | VRAM | Speed |
+|---|---|---|---|
+| OPT-125M (test) | fp16 | 0.25 GiB | ~260 tok/s |
+| DeepSeek-R1-Distill-Qwen-7B | fp16 | ~14 GiB | ~16 tok/s |
+| DeepSeek-R1-Distill-Llama-70B-AWQ | AWQ 4-bit | 37.3 GiB | ~2.6 tok/s |
+| DeepSeek-R1-Distill-Qwen-32B | fp16 | OOM (needs >68 GB) | — |
+
+#### llama.cpp (Vulkan backend) — Recommended for single-user inference
+
+| Model | Quant | Size | pp512 (tok/s) | tg128 (tok/s) |
+|---|---|---|---|---|
+| DeepSeek-R1-Distill-Qwen-32B | Q4_K_M | 18.5 GiB | ~228 | ~10.9 |
+
+llama.cpp with Vulkan is the recommended engine for single-user inference on Strix Halo.
+Community benchmarks show **Vulkan is up to 1.8x faster than ROCm/HIP** on gfx1151.
+
+**llama.cpp setup:**
+```bash
+git clone https://github.com/ggml-org/llama.cpp.git /tmp/llama.cpp
+cd /tmp/llama.cpp
+sudo apt-get install -y libvulkan-dev glslc cmake
+cmake -B build -DGGML_VULKAN=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j$(nproc)
+
+# Download a GGUF model
+huggingface-cli download unsloth/DeepSeek-R1-Distill-Qwen-32B-GGUF \
+  DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf --local-dir ~/models
+
+# Run
+./build/bin/llama-cli -m ~/models/DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf \
+  -ngl 99 -t 8 -b 256 -n 500 -p "Your prompt here"
+```
+
+**Key llama.cpp flags for Strix Halo:**
+- `-ngl 99` — offload all layers to GPU
+- `-b 256` — batch size 256, improves prompt processing for MoE models
+- `-t 8` — CPU threads for any non-GPU work
+- `ROCBLAS_USE_HIPBLASLT=1` — if using HIP backend instead of Vulkan
 
 ### Troubleshooting
 
