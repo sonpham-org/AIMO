@@ -1,236 +1,100 @@
 # AIMO Solver
 
-This repository contains a local inference script and environment setup for the AI Mathematical Olympiad (AIMO) competition. The system utilizes large language models to solve complex mathematical problems by iteratively generating and executing Python code in a sandboxed environment.
+Local inference system for the AI Mathematical Olympiad (AIMO) competition. Uses large language models to solve complex mathematical problems by iteratively generating and executing Python code in a sandboxed Jupyter environment.
 
 ## Features
-- Scalable inference using vLLM backend.
+- Scalable inference using vLLM or llama.cpp (Vulkan) backends.
 - Sandboxed Python execution via Jupyter kernels.
 - Support for multiple solution attempts with early-stopping consensus.
 - Native AMD ROCm support (tested on Strix Halo / Radeon 8060S).
 
-## Quick Start (if already set up)
+## Hardware
+
+- **CPU:** AMD Ryzen AI MAX+ 395
+- **GPU:** Radeon 8060S (RDNA 3.5 / gfx1151)
+- **VRAM:** 96 GB (BIOS-configured unified memory allocation)
+- **Memory bandwidth:** ~215 GB/s (LPDDR5X-8000)
+
+## Quick Start
 
 ```bash
+# llama.cpp Vulkan (recommended — fastest)
+~/llama.cpp/build/bin/llama-cli \
+  -m ~/models/gpt-oss-120b/Q4_K_M/gpt-oss-120b-Q4_K_M-00001-of-00002.gguf \
+  -ngl 99 -t 8 -b 256 -c 8192 -n 500 \
+  -p "Your prompt here"
+
+# vLLM (for batched serving)
+HSA_OVERRIDE_GFX_VERSION=11.5.1 \
+LD_LIBRARY_PATH=~/amd_libs:~/amd_libs/amdsmi-lib:~/amd_libs/therock-sdk/lib \
 .venv/bin/python example.py
-.venv/bin/python example.py --model "facebook/opt-125m" --max-model-len 512  # fast test
-.venv/bin/python example.py --model "Valdemardi/DeepSeek-R1-Distill-Llama-70B-AWQ"
 ```
+
+> For full installation instructions, see **[SETUP.md](SETUP.md)**.
 
 ---
 
-## AMD ROCm Setup Guide (Ubuntu 25.10 + Strix Halo / RDNA 3.5)
+## Benchmark Results (Strix Halo, 96 GB VRAM, ~215 GB/s)
 
-This guide documents how to get vLLM running natively on AMD Strix Halo (gfx1151)
-with Ubuntu 25.10. This was hard-won knowledge — ROCm on consumer RDNA GPUs with a
-bleeding-edge distro requires several workarounds.
+### llama.cpp (Vulkan) — Recommended for single-user inference
 
-### Why is this hard?
-
-1. **Ubuntu 25.10 ships OpenMPI 5.x** which removed the C++ bindings (`libmpi_cxx.so`)
-   that PyTorch ROCm wheels still expect.
-2. **Strix Halo (gfx1151)** is RDNA 3.5 — very new silicon with limited ROCm support.
-3. **No unified ROCm story** — PyTorch bundles ROCm 6.3, vLLM wheels target ROCm 7.0,
-   system packages are ROCm 5.7. All ABI-incompatible.
-4. **vLLM's ROCm wheels** only exist for Python 3.12 + ROCm 7.0.
-
-### Prerequisites
-
-```bash
-# C++ compiler (needed for stubs)
-sudo apt-get install -y g++ libopenmpi40
-
-# GPU driver — make sure /dev/kfd and /dev/dri exist
-ls /dev/kfd /dev/dri/renderD128
-```
-
-### Step 1: Install uv and create Python 3.12 venv
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-export PATH="$HOME/.local/bin:$PATH"
-
-uv venv .venv --python 3.12
-```
-
-### Step 2: Install vLLM ROCm wheel
-
-```bash
-uv pip install vllm --extra-index-url https://wheels.vllm.ai/rocm/ --python .venv/bin/python
-```
-
-This pulls in `vllm-0.15.0+rocm700` along with a matching PyTorch (`2.9.1+git8907517`
-built for ROCm 7.0).
-
-### Step 3: Fix numpy version
-
-```bash
-uv pip install "numpy<2.3" --python .venv/bin/python
-```
-
-Numba (used by Triton) requires NumPy < 2.3.
-
-### Step 4: Download TheRock SDK (ROCm 7.x runtime libraries)
-
-The vLLM ROCm 7.0 wheel needs runtime libraries (`libroctx64.so.4`, `libhipblas.so.3`,
-`libamd_smi.so.26`, etc.) that aren't in Ubuntu's repos. AMD's "TheRock" nightly SDK
-provides them.
-
-```bash
-mkdir -p /tmp/therock-sdk
-cd /tmp
-
-# Download the SDK for your GPU arch (gfx1151 for Strix Halo)
-wget -q "https://github.com/ROCm/TheRock/releases/download/nightly-rocm-7.12/therock-dist-linux-gfx1151-7.12.0a20260129.tar.gz"
-
-# Extract
-tar -xf therock-dist-linux-gfx1151-7.12.0a20260129.tar.gz -C /tmp/therock-sdk --strip-components=1
-```
-
-> Check https://github.com/ROCm/TheRock/releases for the latest nightly.
-> For other GPUs: use `gfx1100` (RX 7900), `gfx1101` (RX 7800/7700), etc.
-
-### Step 5: Install amdsmi from TheRock SDK
-
-```bash
-uv pip install /tmp/therock-sdk/share/amd_smi/ --python .venv/bin/python
-```
-
-Also create a focused lib directory so amdsmi finds the right `.so`:
-
-```bash
-mkdir -p /tmp/amdsmi-lib
-ln -sf /tmp/therock-sdk/lib/libamd_smi.so* /tmp/amdsmi-lib/
-```
-
-### Step 6: Create OpenMPI C++ bindings stub
-
-Ubuntu 25.10's OpenMPI 5.x removed the C++ bindings that PyTorch expects.
-We create a tiny stub with the 3 symbols PyTorch actually needs:
-
-```bash
-cat > /tmp/mpi_cxx_stub.cpp << 'EOF'
-namespace MPI {
-    class Win {
-    public:
-        __attribute__((visibility("default"), noinline)) void Free();
-    };
-    void Win::Free() { volatile int x = 0; (void)x; }
-
-    class Comm {
-    public:
-        __attribute__((visibility("default"), noinline)) Comm();
-    };
-    Comm::Comm() { volatile int x = 0; (void)x; }
-
-    class Datatype {
-    public:
-        __attribute__((visibility("default"), noinline)) void Free();
-    };
-    void Datatype::Free() { volatile int x = 0; (void)x; }
-}
-extern "C" {
-    void ompi_mpi_cxx_op_intercept(void* a, void* b, int* c, void* d) {
-        (void)a; (void)b; (void)c; (void)d;
-    }
-    void ompi_op_set_cxx_callback(void* op, void* fn) {
-        (void)op; (void)fn;
-    }
-}
-EOF
-
-g++ -shared -fPIC -O0 -fno-inline -o /tmp/libmpi_cxx.so.40 /tmp/mpi_cxx_stub.cpp
-```
-
-### Step 7: Run
-
-```bash
-HSA_OVERRIDE_GFX_VERSION=11.5.1 \
-LD_LIBRARY_PATH=/tmp:/tmp/amdsmi-lib:/tmp/therock-sdk/lib \
-.venv/bin/python example.py
-```
-
-Or for a quick sanity test with a tiny model:
-
-```bash
-HSA_OVERRIDE_GFX_VERSION=11.5.1 \
-LD_LIBRARY_PATH=/tmp:/tmp/amdsmi-lib:/tmp/therock-sdk/lib \
-.venv/bin/python example.py --model "facebook/opt-125m" --max-model-len 512 --gpu-memory-utilization 0.3
-```
-
-### Environment Variables Reference
-
-| Variable | Value | Why |
-|---|---|---|
-| `HSA_OVERRIDE_GFX_VERSION` | `11.5.1` | Tell ROCm this is gfx1151 (Strix Halo native arch) |
-| `LD_LIBRARY_PATH` | `/tmp:/tmp/amdsmi-lib:/tmp/therock-sdk/lib` | MPI stub + amdsmi + ROCm 7.x runtime |
-| `VLLM_TARGET_DEVICE` | `rocm` | Force vLLM to use ROCm backend |
-
-### Performance (Strix Halo, 68.7 GB VRAM, LPDDR5X-8000, ~215 GB/s bandwidth)
-
-#### vLLM (0.15.0+rocm700)
-
-| Model | Quant | VRAM | Speed |
-|---|---|---|---|
-| OPT-125M (test) | fp16 | 0.25 GiB | ~260 tok/s |
-| DeepSeek-R1-Distill-Qwen-7B | fp16 | ~14 GiB | ~16 tok/s |
-| DeepSeek-R1-Distill-Llama-70B-AWQ | AWQ 4-bit | 37.3 GiB | ~2.6 tok/s |
-| DeepSeek-R1-Distill-Qwen-32B | fp16 | OOM (needs >68 GB) | — |
-
-#### llama.cpp (Vulkan backend) — Recommended for single-user inference
+Vulkan is **2-3x faster than vLLM ROCm** for token generation on this hardware.
 
 | Model | Quant | Size | pp512 (tok/s) | tg128 (tok/s) |
 |---|---|---|---|---|
-| DeepSeek-R1-Distill-Qwen-32B | Q4_K_M | 18.5 GiB | ~228 | ~10.9 |
+| Qwen3-0.6B | Q8_0 | 604 MiB | 9,790 | **252** |
+| Qwen3-1.7B | Q8_0 | 1.7 GiB | 4,512 | **106** |
+| Qwen3-4B | Q4_K_M | 2.3 GiB | 1,726 | **75** |
+| DeepSeek-R1-Distill-Qwen-7B | Q4_K_M | 4.4 GiB | 1,041 | **46** |
+| Qwen3-8B | Q4_K_M | 4.7 GiB | 966 | **42** |
+| Qwen3-14B | Q4_K_M | 8.4 GiB | 536 | **24** |
+| GPT-OSS-20B (MoE, 3.6B active) | Q4_K_M | 10.8 GiB | 1,143 | **79** |
+| Qwen3-30B-A3B (MoE, 3B active) | Q4_K_M | 17.3 GiB | 1,024 | **89** |
+| Qwen3-32B | Q4_K_M | 18.4 GiB | 217 | **10.75** |
+| DeepSeek-R1-Distill-Qwen-32B | Q4_K_M | 18.5 GiB | 228 | **10.9** |
+| DeepSeek-R1-Distill-Llama-70B | Q4_K_M | 39.6 GiB | 97 | **5.0** |
+| GPT-OSS-120B (MoE, 5.1B active) | Q4_K_M | 58.5 GiB | 498 | **55** |
 
-llama.cpp with Vulkan is the recommended engine for single-user inference on Strix Halo.
-Community benchmarks show **Vulkan is up to 1.8x faster than ROCm/HIP** on gfx1151.
+### vLLM (0.15.0+rocm700)
 
-**llama.cpp setup:**
-```bash
-git clone https://github.com/ggml-org/llama.cpp.git /tmp/llama.cpp
-cd /tmp/llama.cpp
-sudo apt-get install -y libvulkan-dev glslc cmake
-cmake -B build -DGGML_VULKAN=ON -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j$(nproc)
+PagedAttention KV-cache and batching, useful for multi-request serving.
+Slower than Vulkan for single-user due to ROCm/HIP overhead on gfx1151.
 
-# Download a GGUF model
-huggingface-cli download unsloth/DeepSeek-R1-Distill-Qwen-32B-GGUF \
-  DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf --local-dir ~/models
+| Model | Quant | Speed (tok/s) |
+|---|---|---|
+| OPT-125M (test) | fp16 | ~260 |
+| Qwen3-1.7B | fp16 | ~46 |
+| Qwen3-4B | fp16 | ~26 |
+| Qwen3-8B | fp16 | ~13 |
+| DeepSeek-R1-Distill-Qwen-7B | fp16 | ~16 |
+| DeepSeek-R1-Distill-Llama-70B-AWQ | AWQ 4-bit | ~2.6 |
 
-# Run
-./build/bin/llama-cli -m ~/models/DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf \
-  -ngl 99 -t 8 -b 256 -n 500 -p "Your prompt here"
-```
+---
 
-**Key llama.cpp flags for Strix Halo:**
-- `-ngl 99` — offload all layers to GPU
-- `-b 256` — batch size 256, improves prompt processing for MoE models
-- `-t 8` — CPU threads for any non-GPU work
-- `ROCBLAS_USE_HIPBLASLT=1` — if using HIP backend instead of Vulkan
+## Best Models for 50-100 tok/s (Serviceable Speed)
 
-### Troubleshooting
+| Model | Backend | tok/s | Size | Why |
+|---|---|---|---|---|
+| **GPT-OSS-120B (MoE)** | Vulkan | **55** | 58.5 GiB | 117B total / 5.1B active. Near o4-mini reasoning quality. Uses 58.5 of 96 GiB, leaves 37 GiB for KV-cache. |
+| **Qwen3-30B-A3B (MoE)** | Vulkan | **89** | 17.3 GiB | 30B total / 3B active. Best speed-to-quality. 79 GiB free for KV-cache. |
+| **GPT-OSS-20B (MoE)** | Vulkan | **79** | 10.8 GiB | 20.9B total / 3.6B active. OpenAI quality at 79 tok/s. |
+| **Qwen3-4B** | Vulkan | **75** | 2.3 GiB | Dense model, very fast. Great for code and math. |
+| **Qwen3-1.7B Q8** | Vulkan | **106** | 1.7 GiB | Fastest serviceable model. Good for rapid iteration. |
 
-**`libmpi_cxx.so.40: cannot open shared object file`**
-- Run Step 6 to build the stub, make sure `/tmp` is in `LD_LIBRARY_PATH`.
+> **Top recommendation:** GPT-OSS-120B at 55 tok/s — OpenAI's open-weight MoE model
+> with near-o4-mini reasoning, running entirely on-device. Only 5.1B params active per
+> token from 117B total, so it's fast despite its size. Fits in 96 GiB with room for
+> large KV-cache contexts.
+>
+> **Runner-up:** Qwen3-30B-A3B at 89 tok/s if you want more speed and still excellent
+> reasoning quality.
 
-**`libroctx64.so.4: cannot open shared object file`**
-- TheRock SDK not extracted or `/tmp/therock-sdk/lib` not in `LD_LIBRARY_PATH`.
+### Key Insights
 
-**`Numba needs NumPy 2.2 or less`**
-- Run `uv pip install "numpy<2.3" --python .venv/bin/python`.
-
-**`TensileLibrary_lazy_gfx1100.dat: No such file or directory`**
-- You're using `HSA_OVERRIDE_GFX_VERSION=11.0.0` but TheRock SDK has kernels for
-  gfx1151. Use `HSA_OVERRIDE_GFX_VERSION=11.5.1` instead.
-
-**`Cannot find ROCm device library`**
-- Set `DEVICE_LIB_PATH=/tmp/therock-sdk/lib/llvm/amdgcn/bitcode` if building from source.
-
-**Docker alternative**
-- If native setup is too painful, AMD provides container images:
-  ```bash
-  docker pull rocm/vllm-dev:rocm7.0.2_navi_ubuntu24.04_py3.12_pytorch_2.11_vllm_0.14.0
-  ```
+- **MoE models dominate.** GPT-OSS-120B (55 tok/s) and Qwen3-30B-A3B (89 tok/s) are 5-11x faster than dense models of similar quality.
+- **Vulkan >> vLLM ROCm** for single-user inference on RDNA 3.5 (2-3x faster).
+- **96 GB VRAM** enables running GPT-OSS-120B (58.5 GiB) fully on-GPU with KV-cache headroom — impossible on typical 24 GB consumer GPUs.
+- **Token generation is bandwidth-bound** at ~215 GB/s. Speed scales inversely with active model size: halve the active params, double the tok/s.
 
 ---
 
@@ -244,7 +108,3 @@ huggingface-cli download unsloth/DeepSeek-R1-Distill-Qwen-32B-GGUF \
    ```bash
    python main.py --model_path /path/to/your/model
    ```
-
-### Hardware Requirements
-- High-VRAM GPU (recommended 24GB+)
-- Support for FP8/BF16/FP16 precision
