@@ -88,7 +88,7 @@ def extract_problems_from_pdf(pdf_path: str, output_csv: str) -> str:
 
 
 # ==============================================================================
-# Step 2: Jupyter Sandbox (simplified from main.py)
+# Step 2: Jupyter Sandbox (simplified from kaggle_example.py)
 # ==============================================================================
 
 class Sandbox:
@@ -647,7 +647,7 @@ def parse_args():
     )
     p.add_argument(
         "--pdf",
-        default="ai-mathematical-olympiad-progress-prize-3/AIMO3_Reference_Problems.pdf",
+        default="data/ai-mathematical-olympiad-progress-prize-3/AIMO3_Reference_Problems.pdf",
         help="Path to AIMO3 reference problems PDF",
     )
     p.add_argument("--max-model-len", type=int, default=16384)

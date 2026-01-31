@@ -131,5 +131,5 @@ Slower than Vulkan for single-user due to ROCm/HIP overhead on gfx1151.
    ```
 2. Configure your environment and run:
    ```bash
-   python main.py --model_path /path/to/your/model
+   python kaggle_example.py --model_path /path/to/your/model
    ```
