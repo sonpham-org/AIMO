@@ -485,7 +485,8 @@ class AIMO3Solver:
         ]
         
         # Redirect server logs to a file
-        self.log_file = open('vllm_server.log', 'w')
+        os.makedirs('logs', exist_ok=True)
+        self.log_file = open('logs/vllm_server.log', 'w')
         return subprocess.Popen(cmd, stdout=self.log_file, stderr=subprocess.STDOUT, start_new_session=True)
     
     def _wait_for_server(self):
@@ -496,7 +497,7 @@ class AIMO3Solver:
             return_code = self.server_process.poll()
             if return_code is not None:
                 self.log_file.flush()
-                with open('vllm_server.log', 'r') as log_file: logs = log_file.read()
+                with open('logs/vllm_server.log', 'r') as log_file: logs = log_file.read()
                 raise RuntimeError(f'Server died with code {return_code}. Full logs:\n{logs}\n')
             try:
                 self.client.models.list()

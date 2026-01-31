@@ -1,0 +1,8 @@
+logs/
+output/
+*.log
+submission.csv
+problems_extracted.csv
+problems_from_pdf.csv
+.venv/
+__pycache__/
