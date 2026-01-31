@@ -331,7 +331,8 @@ class Solver:
             parts.append("<|assistant|>\n")
             return "\n".join(parts)
 
-    def _solve_once(self, problem: str, attempt_idx: int) -> Optional[int]:
+    def _solve_once(self, problem: str, attempt_idx: int) -> Dict[str, Any]:
+        """Single attempt. Returns dict with 'answer', 'messages', 'turns'."""
         messages = [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": problem},
@@ -344,8 +345,10 @@ class Solver:
             top_p=0.95,
             seed=42 + attempt_idx,
         )
+        turns_used = 0
 
         for turn in range(self.max_turns):
+            turns_used = turn + 1
             prompt = self._format_prompt(messages)
             outputs = self.llm.generate([prompt], sampling)
             reply = outputs[0].outputs[0].text
@@ -356,7 +359,7 @@ class Solver:
 
             answer = extract_answer(reply_clean) or extract_answer(reply)
             if answer is not None:
-                return answer
+                return {"answer": answer, "messages": messages, "turns": turns_used}
 
             code_blocks = extract_code_blocks(reply_clean) or extract_code_blocks(reply)
             if not code_blocks:
@@ -386,30 +389,51 @@ class Solver:
                 ),
             })
 
-        return extract_answer(full_response)
+        answer = extract_answer(full_response)
+        return {"answer": answer, "messages": messages, "turns": turns_used}
 
-    def solve(self, problem: str) -> int:
+    def solve(self, problem: str) -> Dict[str, Any]:
+        """Solve with multiple attempts and majority voting.
+
+        Returns dict with 'answer', 'attempts' (list of per-attempt traces).
+        """
         answers: List[int] = []
+        attempts_data: List[Dict[str, Any]] = []
+
         for i in range(self.attempts):
             print(f"    Attempt {i + 1}/{self.attempts} ...", end=" ", flush=True)
             try:
-                ans = self._solve_once(problem, attempt_idx=i)
+                result = self._solve_once(problem, attempt_idx=i)
+                ans = result["answer"]
                 print(f"-> {ans}")
+                attempts_data.append({
+                    "attempt": i + 1,
+                    "answer": ans,
+                    "turns": result["turns"],
+                    "messages": result["messages"],
+                })
                 if ans is not None:
                     answers.append(ans)
             except Exception as e:
                 print(f"-> Error: {e}")
+                attempts_data.append({
+                    "attempt": i + 1,
+                    "answer": None,
+                    "error": str(e),
+                    "turns": 0,
+                    "messages": [],
+                })
             finally:
                 self.sandbox.reset()
 
         if not answers:
             print("    No valid answer found — defaulting to 0")
-            return 0
+            return {"answer": 0, "attempts": attempts_data}
 
         counter = Counter(answers)
         best = counter.most_common(1)[0][0]
         print(f"    Votes: {dict(counter)} -> Selected: {best}")
-        return best
+        return {"answer": best, "attempts": attempts_data}
 
     def shutdown(self):
         self.sandbox.close()
@@ -488,15 +512,18 @@ class OpenAISolver:
             return f"<think>{reasoning}</think>\n{content}"
         return content
 
-    def _solve_once(self, problem: str, attempt_idx: int) -> Optional[int]:
+    def _solve_once(self, problem: str, attempt_idx: int) -> Dict[str, Any]:
+        """Single attempt. Returns dict with 'answer', 'messages', 'turns'."""
         messages = [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": problem},
         ]
 
         full_response = ""
+        turns_used = 0
 
         for turn in range(self.max_turns):
+            turns_used = turn + 1
             reply = self._chat_completion(messages, seed=42 + attempt_idx)
 
             reply_clean = strip_think_tags(reply)
@@ -505,7 +532,7 @@ class OpenAISolver:
 
             answer = extract_answer(reply_clean) or extract_answer(reply)
             if answer is not None:
-                return answer
+                return {"answer": answer, "messages": messages, "turns": turns_used}
 
             code_blocks = extract_code_blocks(reply_clean) or extract_code_blocks(reply)
             if not code_blocks:
@@ -535,30 +562,51 @@ class OpenAISolver:
                 ),
             })
 
-        return extract_answer(full_response)
+        answer = extract_answer(full_response)
+        return {"answer": answer, "messages": messages, "turns": turns_used}
 
-    def solve(self, problem: str) -> int:
+    def solve(self, problem: str) -> Dict[str, Any]:
+        """Solve with multiple attempts and majority voting.
+
+        Returns dict with 'answer', 'attempts' (list of per-attempt traces).
+        """
         answers: List[int] = []
+        attempts_data: List[Dict[str, Any]] = []
+
         for i in range(self.attempts):
             print(f"    Attempt {i + 1}/{self.attempts} ...", end=" ", flush=True)
             try:
-                ans = self._solve_once(problem, attempt_idx=i)
+                result = self._solve_once(problem, attempt_idx=i)
+                ans = result["answer"]
                 print(f"-> {ans}")
+                attempts_data.append({
+                    "attempt": i + 1,
+                    "answer": ans,
+                    "turns": result["turns"],
+                    "messages": result["messages"],
+                })
                 if ans is not None:
                     answers.append(ans)
             except Exception as e:
                 print(f"-> Error: {e}")
+                attempts_data.append({
+                    "attempt": i + 1,
+                    "answer": None,
+                    "error": str(e),
+                    "turns": 0,
+                    "messages": [],
+                })
             finally:
                 self.sandbox.reset()
 
         if not answers:
             print("    No valid answer found — defaulting to 0")
-            return 0
+            return {"answer": 0, "attempts": attempts_data}
 
         counter = Counter(answers)
         best = counter.most_common(1)[0][0]
         print(f"    Votes: {dict(counter)} -> Selected: {best}")
-        return best
+        return {"answer": best, "attempts": attempts_data}
 
     def shutdown(self):
         self.sandbox.close()
@@ -722,6 +770,8 @@ def main():
 
     # ── Step 4: Solve each problem ──
     results: List[Dict[str, Any]] = []
+    traces_dir = os.path.join(run_dir, "traces")
+    os.makedirs(traces_dir, exist_ok=True)
     total_t0 = time.time()
 
     try:
@@ -738,18 +788,33 @@ def main():
             print(f"{preview}\n")
 
             t0 = time.time()
-            answer = solver.solve(problem_text)
+            solve_result = solver.solve(problem_text)
             elapsed = time.time() - t0
+            answer = solve_result["answer"]
 
             results.append({"id": prob_id, "answer": answer})
 
             tag = ""
-            if prob_id in known_answers:
-                expected = known_answers[prob_id]
+            expected = known_answers.get(prob_id)
+            if expected is not None:
                 verdict = "CORRECT" if answer == expected else "WRONG"
                 tag = f"  [{verdict}, expected={expected}]"
 
             print(f"  => Answer: {answer}{tag}  ({elapsed:.1f}s)\n")
+
+            # Save per-problem trace
+            trace = {
+                "id": prob_id,
+                "problem": problem_text,
+                "answer": answer,
+                "expected": expected,
+                "correct": answer == expected if expected is not None else None,
+                "time_s": round(elapsed, 1),
+                "attempts": solve_result["attempts"],
+            }
+            trace_path = os.path.join(traces_dir, f"{prob_id}.json")
+            with open(trace_path, "w") as f:
+                json.dump(trace, f, indent=2, ensure_ascii=False)
 
     except KeyboardInterrupt:
         print("\nInterrupted by user.")
