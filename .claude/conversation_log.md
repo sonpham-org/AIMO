@@ -381,3 +381,31 @@ kaggle_submissions/
 - `imagination-research/deepseek-14b-sft-dpo2` — Their best DPO checkpoint (primary)
 - `deepseek-ai/DeepSeek-R1-Distill-Qwen-14B-AWQ` — Off-the-shelf fallback
 - `Qwen/Qwen3-30B-A3B` — Already uploaded (solution 3)
+
+---
+
+## 2026-02-01 - Session 6: vLLM Python 3.12 Wheels — Resolved
+
+### Problem
+Kaggle upgraded to Python 3.12. vLLM needed to be installed offline (no internet during competition). Previous attempts with custom wheel sets failed due to dependency conflicts (numpy<2.0 requirement, torch version pinning).
+
+### What Worked
+- **Dataset:** `sonphamorg/vllm-wheels-py312-cu129` (created by other Claude agent on NVIDIA 4090)
+- **vLLM version:** 0.15.0 (latest)
+- **CUDA:** 12.9, torch 2.9.1+cu129
+- **Install command:** `bash /kaggle/input/vllm-wheels-py312-cu129/install.sh`
+- **Confirmed working:** vLLM imports OK, model loads OK on Kaggle H100
+
+### What Didn't Work
+- Our `sonphamorg/vllm-wheels-cp312` dataset (vLLM 0.8.0, CUDA 12.4) failed because:
+  1. vLLM 0.8.0 requires `numpy<2.0.0` — Kaggle has numpy 2.x, no internet to downgrade
+  2. Even with numpy wheel included, `--no-index` still tried to resolve torch==2.6.0 from PyPI
+  3. `--no-deps` approach worked for vLLM itself but required manually listing all missing deps, and Kaggle's `%%bash` cell broke `\` line continuations (trailing whitespace issue)
+
+### Notebook Updated
+- Cell 16 now installs from `vllm-wheels-py312-cu129/wheels/`
+- kernel-metadata.json includes `dataset_sources: ["sonphamorg/vllm-wheels-py312-cu129"]`
+- Pushed to GitHub
+
+### Key Lesson
+For Kaggle offline wheel datasets: include ALL dependencies (including torch, numpy, CUDA libs) in the wheels directory. Don't try to be clever with a "slim" set that relies on Kaggle's pre-installed packages — version mismatches and pip's dependency resolver will cause pain. The full-fat approach (like `vllm-wheels-py312-cu129`) just works.
