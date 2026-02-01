@@ -272,3 +272,61 @@ User provided full content of `friederrr/aimo-3-submission-demo-notebook-2-2` wh
 - **Our advantages over demo**: TIR with feedback (3 rounds), more prompts (10), early stopping on consensus
 - **Test problems**: "What is 0x10?", "What is 1-1?", "Solve 4+x=4" — trivial tests, all answered 0
 - **GPU**: Single H100, ~79GB VRAM, model takes 32GB, KV cache ~41GB available
+
+---
+
+## 2026-02-01 - Session 4: vLLM + Python 3.12 Compatibility Research
+
+### Context
+Kaggle recently upgraded to Python 3.12. Need to find compatible vLLM version for CUDA 12.4 + H100.
+
+### Key Findings
+
+#### vLLM Version / CUDA / PyTorch Compatibility Matrix
+| vLLM Version | Default CUDA | PyTorch Version | Python 3.12 |
+|---|---|---|---|
+| 0.6.x | CUDA 12.1 | torch 2.4-2.5 | Yes (cp38-abi3) |
+| 0.7.x | CUDA 12.1 | torch 2.5 | Yes (cp38-abi3) |
+| 0.8.0-0.8.4 | **CUDA 12.4** | **torch 2.6** | Yes (cp38-abi3) |
+| 0.8.5 | CUDA 12.x | torch 2.8 | Yes |
+| 0.9.x | CUDA 12.8 | torch 2.8 | Yes |
+| 0.11+ | CUDA 12.9 | torch 2.8-2.9 | Yes |
+| 0.15.0 (latest) | CUDA 12.9 | torch 2.9 | Yes |
+
+#### Best Match for Kaggle (CUDA 12.4 + torch 2.6 + Python 3.12)
+- **vLLM 0.8.0 through 0.8.4** — built with CUDA 12.4 by default, requires torch 2.6
+- This perfectly matches: torch-2.6.0-cp312 + CUDA 12.4 wheels already downloaded
+
+#### Kaggle-Specific Issues
+- GitHub Issue #27132: vLLM versions above v0.10 won't run on Kaggle
+- Root cause: numpy version conflict — fix is `numpy<2.3`
+- Older versions (0.8.x) should work fine on Kaggle
+
+#### Wheel Format
+- Modern vLLM uses `cp38-abi3` stable ABI wheels (no separate cp312 wheel needed)
+- Compatible with Python 3.8+ including 3.12
+- PyPI metadata: `Python >=3.10, <3.14` (for recent versions); older versions support `>=3.9, <3.13`
+
+#### CUDA Forward Compatibility
+- CUDA 12.x minor versions are forward-compatible
+- Wheels built for CUDA 12.1 work on CUDA 12.4 systems (if driver is new enough)
+- But CUDA 12.4-native builds (vLLM 0.8.x) are ideal for CUDA 12.4 environments
+
+### Kaggle Dataset: vLLM Wheels
+- **Dataset URL:** https://www.kaggle.com/datasets/sonphamorg/vllm-wheels-cp312
+- **Contents:** 104 wheels (~668MB) — vLLM 0.8.0 + all deps EXCEPT torch/nvidia/triton (Kaggle already has these)
+- **Key packages:** vllm-0.8.0, xformers-0.0.29.post2, xgrammar-0.1.16, numba-0.60.0, ray-2.53.0, cupy-cuda12x-13.6.0
+- **Install on Kaggle:** `pip install --no-index --find-links /kaggle/input/vllm-wheels-cp312/ vllm==0.8.0`
+- **Full wheels set** (3.6GB, 139 wheels including torch/nvidia) also exists locally at `kaggle_push/vllm-wheels/` as backup
+- **Old dataset:** `sonphamorg/vllm-offline-install-cp312-fix` (5MB, only msgspec + xgrammar) — superseded
+
+### Potential Issues to Watch
+- vLLM 0.8.0 requires `numpy<2.0.0` — may conflict with Kaggle's pre-installed numpy 2.x
+- If numpy conflict: add `pip install "numpy<2.0"` before vLLM install
+- Must uninstall tensorflow, matplotlib, keras, scikit-learn before vLLM (from friederrr demo)
+- Running on AMD 8060s locally — cannot test CUDA functionality, need NVIDIA machine for testing
+
+### Skills Updated
+- Added "Multi-Agent Sync via Conversation Log" skill to `.claude/skills.md`
+- Added "Kaggle Dataset Upload" skill with API token instructions
+- Added "vLLM Wheel Management for Kaggle" skill with version compatibility matrix

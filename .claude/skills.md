@@ -15,6 +15,80 @@
 
 **File location:** `/home/son/GitHub/AIMO/.claude/conversation_log.md`
 
+## Skill: Multi-Agent Sync via Conversation Log
+
+**When to trigger:** When multiple Claude Code instances work on this project simultaneously (e.g., one on AMD machine, one on NVIDIA machine).
+
+**What to do:**
+1. **At session start:** `git pull origin main` to get latest conversation log
+2. **Before reading conversation_log.md:** Always `git pull` first to get updates from other agents
+3. **After writing to conversation_log.md:** Commit and push immediately:
+   ```
+   git add .claude/conversation_log.md
+   git commit -m "Update conversation log"
+   git push origin main
+   ```
+4. **Before making decisions that depend on other agents' work:** Pull and re-read the log
+5. **Tag entries with machine/agent identity** when multiple agents are active, e.g.:
+   ```
+   ### [AMD-8060s] Session 4: ...
+   ### [NVIDIA-4090] Session 4: ...
+   ```
+
+**Conflict resolution:** If `git push` fails due to conflicts, pull with rebase (`git pull --rebase origin main`), resolve any merge conflicts in the log (keep both entries), then push again.
+
+**Why this exists:** The user runs Claude Code on multiple machines (AMD 8060s, NVIDIA 4090). The conversation log in git is the primary mechanism for agents to share context, decisions, and progress.
+
+---
+
+## Skill: Kaggle Dataset Upload
+
+**When to trigger:** When uploading wheels, models, or data to Kaggle as a dataset.
+
+**What to do:**
+1. Export the API token: `export KAGGLE_API_TOKEN=<token from .env>`
+2. Create `dataset-metadata.json` in the data directory with:
+   ```json
+   {
+     "title": "Human-readable title",
+     "id": "sonphamorg/slug-name",
+     "licenses": [{"name": "Apache 2.0"}]
+   }
+   ```
+3. Upload: `kaggle datasets create -p /path/to/dir/`
+4. For updates: `kaggle datasets version -p /path/to/dir/ -m "version message"`
+
+**Key details:**
+- Kaggle API uses `KAGGLE_API_TOKEN` env var (not kaggle.json)
+- The token is stored in `.env` (gitignored)
+- Max dataset size: ~20GB
+- Kaggle username: `sonphamorg`
+
+---
+
+## Skill: vLLM Wheel Management for Kaggle
+
+**When to trigger:** When preparing vLLM for Kaggle offline competition environments.
+
+**What to do:**
+1. Use `pip download vllm==<version> --dest <dir> --python-version 3.12 --platform manylinux2014_x86_64 --platform manylinux_2_17_x86_64 --platform manylinux_2_28_x86_64 --platform linux_x86_64 --only-binary :all:` to download all wheels
+2. Create slim version by excluding packages Kaggle already has (torch, nvidia-*, triton, numpy, pillow, etc.)
+3. Upload as Kaggle dataset
+4. In notebook: `pip install --no-index --find-links /kaggle/input/<dataset>/ vllm==<version>`
+
+**Version compatibility (as of 2026-02):**
+- Kaggle has: Python 3.12, torch 2.6.0+cu124, CUDA 12.4-12.6
+- Best vLLM version: **0.8.0** (CUDA 12.4, torch 2.6.0, cp38-abi3 stable ABI)
+- Avoid vLLM ≥0.8.5 (needs torch 2.8+), ≥0.10 (Kaggle compatibility issues)
+- Key deps to include: xgrammar==0.1.16, msgspec, xformers==0.0.29.post2, numba==0.60.0
+- numpy<2.0.0 required by vLLM 0.8.0 (may conflict with Kaggle's numpy 2.x)
+
+**Datasets on Kaggle:**
+- `sonphamorg/vllm-wheels-cp312` — slim set (~668MB, 104 wheels, no torch/nvidia)
+- `sonphamorg/vllm-offline-install-cp312-fix` — old minimal set (msgspec + xgrammar only)
+
+---
+
 ## How to Use This File
 
 This `skills.md` file should be referenced by placing it in the project's `CLAUDE.md` or by the user reminding Claude to check `.claude/` at session start. The conversation log serves as persistent memory for this project.
