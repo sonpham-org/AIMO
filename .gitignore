@@ -10,3 +10,5 @@ __pycache__/
 *.whl
 kaggle_push/wheels/
 kaggle_push/vllm-cp312-fix/
+kaggle_push/vllm-wheels/
+kaggle_push/vllm-wheels-slim/
