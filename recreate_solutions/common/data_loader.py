@@ -7,8 +7,8 @@ import pandas as pd
 
 
 # Paths relative to repo root
-AIMO3_REFERENCE = "data/ai-mathematical-olympiad-progress-prize-3/reference.csv"
-AIMO2_REFERENCE = "data/ai-mathematical-olympiad-progress-prize-2/reference.csv"
+AIMO3_REFERENCE = "data/aimo3/reference.csv"
+AIMO2_REFERENCE = "data/aimo2/reference.csv"
 
 
 def load_problems(

@@ -13,8 +13,8 @@ import os
 import re
 import sys
 
-PDF_PATH = "data/ai-mathematical-olympiad-progress-prize-3/AIMO3_Reference_Problems.pdf"
-REF_CSV = "data/ai-mathematical-olympiad-progress-prize-3/reference.csv"
+PDF_PATH = "data/aimo3/AIMO3_Reference_Problems.pdf"
+REF_CSV = "data/aimo3/reference.csv"
 OUTPUT_CSV = "logs/problems_from_pdf.csv"
 
 

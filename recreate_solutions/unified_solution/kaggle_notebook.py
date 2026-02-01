@@ -412,7 +412,7 @@ def main():
             # Local evaluation mode
             test_csv = "test.csv"
             if not os.path.exists(test_csv):
-                test_csv = "data/ai-mathematical-olympiad-progress-prize-3/reference.csv"
+                test_csv = "data/aimo3/reference.csv"
             df = pd.read_csv(test_csv)
             results = []
 
