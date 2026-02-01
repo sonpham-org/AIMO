@@ -6,3 +6,7 @@ problems_extracted.csv
 problems_from_pdf.csv
 .venv/
 __pycache__/
+.env
+*.whl
+kaggle_push/wheels/
+kaggle_push/vllm-cp312-fix/

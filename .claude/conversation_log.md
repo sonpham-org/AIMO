@@ -214,3 +214,61 @@ No training needed. The entire approach is inference-only, which is its biggest 
 - AIMO3 differences from AIMO2: H100 GPUs (vs L4), 9-hour limit (vs 5h), ~50 problems
 - For Kaggle: model must be uploaded as a Kaggle Model or Dataset input at `/kaggle/input/...`
 - Key parameters: 12 attempts, 16 max turns, temperature 0.6, 8 parallel workers
+
+---
+
+## 2026-02-01 - Session 3: Kaggle Submission Notebook & Push
+
+### AIMO3 Competition Details (Updated)
+- **Hardware:** H100 GPUs (roughly 2x compute of AIMO2's L4s)
+- **Time limit:** 9 hours
+- **Problems:** 110 math problems (National Olympiad to IMO level)
+- **Answer format:** 5-digit integers (0-99999) — makes guessing virtually impossible
+- **Subject areas:** Algebra, combinatorics, geometry, number theory
+- **All problems are original** — zero data contamination risk
+
+### Kaggle Submission Infrastructure
+- AIMO3 uses `kaggle_evaluation.aimo_3_inference_server.AIMO3InferenceServer`
+- predict function signature: `predict(id_: pl.Series, problem: pl.Series) -> pl.DataFrame`
+- Competition rerun detected via `os.getenv("KAGGLE_IS_COMPETITION_RERUN")`
+- Local gateway mode: `inference_server.run_local_gateway(("path/to/test.csv",))`
+
+### Created .ipynb Notebook
+- Created `kaggle_push/kaggle_submission.ipynb` — block-by-block version of kaggle_submission.py
+- 10 cells: env setup, imports, config, model path, REPL, answer extraction, model wrapper, model load, predict function, inference server
+- Each cell has test outputs for easy debugging on Kaggle
+- Updated `kernel-metadata.json` to use notebook format
+
+### Kaggle Push Setup
+- Auth: `~/.kaggle/kaggle.json` contains username + KGAT token
+- Push command: `KAGGLE_API_TOKEN="KGAT_..." ~/.local/bin/kaggle kernels push -p kaggle_push/`
+- **Successfully pushed version 1** to https://www.kaggle.com/code/sonphamorg/aimo3-qwen3-30b-tir-solver
+- Kernel-metadata.json uses `"model_sources": ["qwen/qwen3-30b-a3b"]` (owner/slug format, not full path)
+
+### Key Findings from Demo Notebook Research
+- Could not scrape Kaggle notebooks (dynamic JS rendering blocks all access)
+- `kaggle_evaluation` package is Kaggle-internal (not on PyPI) — only available on Kaggle notebooks
+- For future reference: `kaggle kernels pull user/notebook-slug` to download notebooks (requires working CLI)
+
+### CRITICAL BUG FIX: Predict Function Signature (from friederrr demo notebook)
+User provided full content of `friederrr/aimo-3-submission-demo-notebook-2-2` which revealed:
+- **Our predict function had the WRONG parameter name**: `problem` instead of `question`
+- AIMO3 test CSV has columns `id` and `question` — the inference server maps these to predict() params by name
+- **Correct signature**: `predict(id_: pl.DataFrame, question: pl.DataFrame, answer: Optional[pl.DataFrame] = None) -> pl.DataFrame`
+- **Our old (broken) signature**: `predict(id_: pl.Series, problem: pl.Series) -> pl.DataFrame`
+- Fixed in both `kaggle_push/kaggle_submission.py`, `kaggle_submission.py`, and `.ipynb`
+- Pushed version 2 to Kaggle
+
+### Demo Notebook Technical Details (friederrr, based on AIMO2 ESP winner)
+- **Model**: `Qwen/Qwen3-32B-FP8` (full 32B, FP8 quantized — not the 30B-A3B MoE we chose)
+- **vLLM config**: `max_num_seqs=256`, `max_model_len=32768`, `gpu_memory_utilization=0.96`
+- **SamplingParams**: `temperature=1.0`, `min_p=0.01`, no seed
+- **Cutoff**: 4h45m (very conservative for 9h limit)
+- **Dependency installation**: Via "Utility Script" notebook pattern — pip install to `/kaggle/working` in a separate notebook, then link as input
+- **Conflicts**: Must uninstall tensorflow, matplotlib, keras, scikit-learn before vLLM
+- **torch version**: 2.8.0+cu128
+- **Only 5 prompts** (our 10 is more), **max_rounds=1** (we do 3 with TIR feedback)
+- **No TIR feedback loop** — they extract code output numbers but don't feed back to model
+- **Our advantages over demo**: TIR with feedback (3 rounds), more prompts (10), early stopping on consensus
+- **Test problems**: "What is 0x10?", "What is 1-1?", "Solve 4+x=4" — trivial tests, all answered 0
+- **GPU**: Single H100, ~79GB VRAM, model takes 32GB, KV cache ~41GB available

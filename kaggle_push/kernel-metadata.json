@@ -1,0 +1,17 @@
+{
+  "id": "sonphamorg/aimo3-qwen3-30b-tir-solver",
+  "title": "AIMO3 Qwen3-30B TIR Solver",
+  "code_file": "kaggle_submission.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "competition": "ai-mathematical-olympiad-progress-prize-3",
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "model_sources": ["qwen/qwen3-30b-a3b"],
+  "category_ids": [],
+  "keywords": []
+}
