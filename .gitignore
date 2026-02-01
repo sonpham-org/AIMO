@@ -8,7 +8,9 @@ problems_from_pdf.csv
 __pycache__/
 .env
 *.whl
-kaggle_push/wheels/
-kaggle_push/vllm-cp312-fix/
-kaggle_push/vllm-wheels/
-kaggle_push/vllm-wheels-slim/
+kaggle_submissions/*/wheels/
+kaggle_submissions/*/vllm-cp312-fix/
+kaggle_submissions/*/vllm-wheels/
+kaggle_submissions/*/vllm-wheels-slim/
+vllm_wheels/
+vllm_dataset/

@@ -330,3 +330,54 @@ Kaggle recently upgraded to Python 3.12. Need to find compatible vLLM version fo
 - Added "Multi-Agent Sync via Conversation Log" skill to `.claude/skills.md`
 - Added "Kaggle Dataset Upload" skill with API token instructions
 - Added "vLLM Wheel Management for Kaggle" skill with version compatibility matrix
+
+---
+
+## 2026-02-01 - Session 5: Reorganize Submissions + 2nd-Place Kaggle Notebook
+
+### Reorganized kaggle_submissions/ Directory
+- Moved `kaggle_push/*` → `kaggle_submissions/solution_3_aliev_baseline/` (git mv, preserves history)
+- Deleted root `kaggle_submission.py` (was duplicate of kaggle_push version)
+- Updated `.gitignore` to use `kaggle_submissions/*/` glob patterns
+- Created placeholder `kaggle_submissions/solution_1_nemoskills/README.md`
+
+### New Directory Structure
+```
+kaggle_submissions/
+├── solution_3_aliev_baseline/    # Existing Qwen3-30B TIR solver
+│   ├── kaggle_submission.py
+│   ├── kaggle_submission.ipynb
+│   ├── kernel-metadata.json
+│   ├── install_vllm.sh
+│   └── test_vllm_install.py
+├── solution_2_imagination/       # NEW — 2nd place approach
+│   ├── kaggle_submission.py
+│   ├── kaggle_submission.ipynb
+│   ├── kernel-metadata.json
+│   └── README.md
+└── solution_1_nemoskills/        # Placeholder
+    └── README.md
+```
+
+### 2nd-Place Solution Kaggle Notebook Created
+- `kaggle_submissions/solution_2_imagination/kaggle_submission.py` — full implementation
+- Adapted imagination-research approach for AIMO3 (H100, 9hrs, 110 problems)
+- Key features:
+  - **Dual prompting**: 7 CoT + 8 Code = 15 samples per problem
+  - **TIR**: Max 3 rounds of code execution feedback per sample
+  - **Sample-level early stopping**: Stop at first \boxed{}
+  - **Question-level early stopping**: Stop when 5+ answers agree
+  - **Dynamic speed control**: 3 speed levels based on remaining time budget
+    - Speed 3: 15 samples (≥180s/q avg remaining)
+    - Speed 2: 10 samples (≥90s/q)
+    - Speed 1: 5 samples (desperate mode)
+  - **Local RTX 4090 support**: `--api-base` or `--local-model` flags for local testing
+  - **Model configuration**: Easy switch between imagination-research/deepseek-14b-sft-dpo2, custom fine-tuned, or off-the-shelf AWQ
+- Kernel metadata: `sonphamorg/aimo3-imagination-deepseek14b-solver`
+- vLLM config: `gpu_memory_utilization=0.95`, `enforce_eager=True`, `max_model_len=32768`
+- Per-sample varied seeds (SEED + idx*13) for diversity in vLLM batch generation
+
+### Model Candidates for Kaggle Upload
+- `imagination-research/deepseek-14b-sft-dpo2` — Their best DPO checkpoint (primary)
+- `deepseek-ai/DeepSeek-R1-Distill-Qwen-14B-AWQ` — Off-the-shelf fallback
+- `Qwen/Qwen3-30B-A3B` — Already uploaded (solution 3)

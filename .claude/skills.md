@@ -59,8 +59,10 @@
 4. For updates: `kaggle datasets version -p /path/to/dir/ -m "version message"`
 
 **Key details:**
-- Kaggle API uses `KAGGLE_API_TOKEN` env var (not kaggle.json)
-- The token is stored in `.env` (gitignored)
+- **NEVER use or modify `~/.kaggle/kaggle.json`** — it may contain stale/wrong credentials
+- **ALWAYS** authenticate via: `export KAGGLE_API_TOKEN=<token from .env>` before any `kaggle` CLI command
+- The token is stored in `.env` (gitignored) as `KAGGLE_API_TOKEN=KGAT_...`
+- Load it with: `export $(grep KAGGLE_API_TOKEN .env | xargs)`
 - Max dataset size: ~20GB
 - Kaggle username: `sonphamorg`
 
@@ -77,15 +79,15 @@
 4. In notebook: `pip install --no-index --find-links /kaggle/input/<dataset>/ vllm==<version>`
 
 **Version compatibility (as of 2026-02):**
-- Kaggle has: Python 3.12, torch 2.6.0+cu124, CUDA 12.4-12.6
-- Best vLLM version: **0.8.0** (CUDA 12.4, torch 2.6.0, cp38-abi3 stable ABI)
-- Avoid vLLM ≥0.8.5 (needs torch 2.8+), ≥0.10 (Kaggle compatibility issues)
-- Key deps to include: xgrammar==0.1.16, msgspec, xformers==0.0.29.post2, numba==0.60.0
-- numpy<2.0.0 required by vLLM 0.8.0 (may conflict with Kaggle's numpy 2.x)
-
-**Datasets on Kaggle:**
-- `sonphamorg/vllm-wheels-cp312` — slim set (~668MB, 104 wheels, no torch/nvidia)
-- `sonphamorg/vllm-offline-install-cp312-fix` — old minimal set (msgspec + xgrammar only)
+- Kaggle has: Python 3.12, CUDA 12.5+ (nvcc), cuda-python 12.9.4
+- **Full dataset approach:** vLLM 0.15.0 + torch 2.9.1+cu129 + all deps (163 wheels, 5.3GB)
+  - Tested on RTX 4090, Python 3.12, CUDA 12.9 — works perfectly
+  - Dataset: `sonphamorg/vllm-wheels-py312-cu129`
+  - Install: `pip install --no-index --find-links /kaggle/input/vllm-wheels-py312-cu129/wheels/ vllm`
+- **Slim dataset (older):** vLLM 0.8.0 (CUDA 12.4, torch 2.6.0)
+  - Avoid vLLM ≥0.8.5 if relying on Kaggle's pre-installed torch
+  - Dataset: `sonphamorg/vllm-wheels-cp312` — slim set (~668MB, 104 wheels, no torch/nvidia)
+  - `sonphamorg/vllm-offline-install-cp312-fix` — old minimal set (msgspec + xgrammar only)
 
 ---
 
