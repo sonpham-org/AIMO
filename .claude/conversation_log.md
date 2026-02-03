@@ -476,3 +476,128 @@ Full plan saved to `.claude/iteration_plan.md` — covers:
 2. Non-finetuning iteration (prompt sweeps, ablation testing, decoupled generation/selection)
 3. Fine-tuning iteration (DPO from competition outputs, progressive model scaling)
 **Next step**: Switch to NVIDIA machine with more VRAM, pull this repo, implement save-and-replay first.
+
+---
+
+## 2026-02-02 - Session 8: Trace Generation + Replay Selection System
+
+### Implementation Complete
+Built the full save-and-replay infrastructure for offline strategy iteration:
+
+**Files Created:**
+- `scripts/prompts.py` (~55 lines) — Prompt variants registry with exact text from improv1 notebook
+- `scripts/generate_traces.py` (~350 lines) — TIR trace generation with logprobs, entropy, code execution tracking
+- `scripts/replay_selection.py` (~480 lines) — 138 selection strategies + Bayesian optimization
+- `scripts/smoke_test.py` (~120 lines) — End-to-end verification script
+
+**Selection Strategies (138 total):**
+- **Group 1 (6):** Majority vote + 4 pure entropy transforms (1/x, 1/x², exp(-x), 1/log(1+x)) + min entropy
+- **Group 2 (40):** Hybrid weighting: score = Σ(transform(entropy)) + k × votes, 4 transforms × 10 k-values
+- **Group 3 (44):** Normalized hybrids: (1-α)×norm_entropy + α×norm_votes, 4 transforms × 11 α-values
+- **Group 4 (34):** Threshold filters (7) + Top-K (6) + Threshold×Hybrid cross-product (21)
+- **Group 5 (6):** Source-aware (code_fallback weighting)
+- **Group 6 (8):** Prompt-aware (meta-vote, diversity bonus, weighted meta-vote, prompt-type-only)
+
+**Infrastructure:**
+- SQLite database at `results/experiments.db` with tables: `selection_results`, `generation_runs`
+- Bayesian optimization via Optuna (TPE sampler) for generation hyperparams
+- All trace JSON files include: answer, answer_source, entropy, prompt_type, code executions, logprobs summary
+
+### What Needs GPU
+This machine (AMD) cannot run the pipeline — requires NVIDIA GPU with vLLM + jupyter_client. The scripts are ready; they need to be run on the NVIDIA machine.
+
+### Update: Running on AMD Strix Halo (not NVIDIA)
+Discovered this IS the AMD machine with llama.cpp Vulkan. The venv already has jupyter_client. Everything works locally.
+
+### Overnight Run Started (2026-02-03 00:37 EST)
+
+**Configuration:**
+- Model: gpt-oss-120b Q4_K_M (actual competition model, 60GB)
+- Problems: 53 (all reference problems)
+- Samples per problem: 12
+- Max turns: 16
+- Temperature: 0.6
+- Output: `output/traces/gpt_oss_120b_full/`
+- Log: `output/overnight_run.log`
+- PID: 324556
+
+**Observed speeds:**
+- Trivial problems: ~15s per sample
+- Olympiad problems: ~6 min per sample (with Qwen3-30B-A3B)
+- gpt-oss-120b expected similar or slightly slower
+
+**Monitor:**
+```bash
+tail -f output/overnight_run.log
+ls output/traces/gpt_oss_120b_full/problem_*.json | wc -l
+```
+
+**When done (morning):**
+```bash
+source .venv/bin/activate
+python scripts/replay_selection.py sweep --traces-dir output/traces/gpt_oss_120b_full/
+```
+
+---
+
+## 2026-02-03 - Session 9: Kaggle Trace Generator Notebook
+
+### Overnight Run Status
+The local trace generation job crashed multiple times due to:
+1. `KeyError: 'entropy'` — sample failed to generate entropy data
+2. Long gaps suggesting machine went to sleep
+3. Completed only 10/53 problems (2/5 correct = 40%)
+
+### Decision: Move to Kaggle H100
+Local llama.cpp on AMD is unreliable for long runs. Created Kaggle notebook to:
+- Use the actual competition infrastructure (gpt-oss-120b + vLLM + openai_harmony)
+- Run on reliable H100 GPU
+- Generate traces in format compatible with `replay_selection.py`
+
+### Files Created
+
+```
+kaggle_submissions/trace_generator/
+├── kaggle_trace_generator.py      # Standalone Python script
+├── kaggle_trace_generator.ipynb   # Kaggle notebook (14 cells)
+├── kernel-metadata.json           # Kaggle push config
+├── reference_dataset/             # Dataset to upload
+│   ├── reference.csv              # 53 AIMO3 problems with answers
+│   └── dataset-metadata.json      # Kaggle dataset config
+└── README.md                      # Setup instructions
+```
+
+### Notebook Features
+- **Detailed markdown documentation** at top explaining purpose and usage
+- **Same infrastructure** as competition notebook (gpt-oss-120b, vLLM, openai_harmony)
+- **Compatible trace format** for `scripts/replay_selection.py`
+- **12 samples per problem**: 8 reasoning + 2 code-first + 2 case-analysis
+- **128 max turns** (deep TIR like competition)
+- **Entropy/logprobs** collection for all attempts
+- **Code execution tracking** with full history
+- **Per-problem JSON files** + summary.json + config.json
+
+### Kaggle Push Commands
+
+```bash
+# 1. Upload reference problems dataset
+cd kaggle_submissions/trace_generator/reference_dataset
+kaggle datasets create -p .
+
+# 2. Push notebook
+cd kaggle_submissions/trace_generator
+kaggle kernels push -p .
+```
+
+### Expected Output
+- 53 `problem_{id}.json` files in `/kaggle/working/traces/`
+- `summary.json` with overall accuracy
+- `config.json` with generation parameters
+- ~9 hours runtime (fits Kaggle limit)
+
+### Next Steps
+1. Push reference dataset to Kaggle
+2. Push notebook to Kaggle
+3. Run with H100 GPU, 9h timeout
+4. Download traces
+5. Run `python scripts/replay_selection.py sweep --traces-dir ./traces/`

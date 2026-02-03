@@ -14,3 +14,4 @@ kaggle_submissions/*/vllm-wheels/
 kaggle_submissions/*/vllm-wheels-slim/
 vllm_wheels/
 vllm_dataset/
+data/aime/*.csv

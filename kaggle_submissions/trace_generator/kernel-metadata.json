@@ -1,0 +1,27 @@
+{
+  "id": "sonphamorg/aimo3-trace-generator",
+  "title": "AIMO3 Trace Generator",
+  "code_file": "kaggle_trace_generator.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": false,
+  "keywords": [
+    "aimo3",
+    "trace-generation",
+    "gpt-oss-120b"
+  ],
+  "dataset_sources": [
+    "sonphamorg/aimo3-reference-problems"
+  ],
+  "kernel_sources": [
+    "andreasbis/aimo-3-utils"
+  ],
+  "competition_sources": [
+    "ai-mathematical-olympiad-progress-prize-3"
+  ],
+  "model_sources": [
+    "danielhanchen/gpt-oss-120b"
+  ]
+}

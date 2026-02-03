@@ -1,0 +1,4 @@
+# This directory will contain AIME dataset files after running:
+#   python scripts/split_aime.py
+#
+# The CSV files are gitignored to avoid committing large data files.
