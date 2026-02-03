@@ -1,0 +1,22 @@
+{
+  "id": "sonphamorg/aimo3-entropy-plus-v1",
+  "title": "AIMO3 Entropy Plus v1",
+  "code_file": "kaggle_submission.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": ["gpu"],
+  "dataset_sources": [],
+  "kernel_sources": [
+    "andreasbis/aimo-3-utils"
+  ],
+  "competition_sources": [
+    "ai-mathematical-olympiad-progress-prize-3"
+  ],
+  "model_sources": [
+    "danielhanchen/gpt-oss-120b"
+  ]
+}

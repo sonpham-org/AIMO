@@ -409,3 +409,70 @@ Kaggle upgraded to Python 3.12. vLLM needed to be installed offline (no internet
 
 ### Key Lesson
 For Kaggle offline wheel datasets: include ALL dependencies (including torch, numpy, CUDA libs) in the wheels directory. Don't try to be clever with a "slim" set that relies on Kaggle's pre-installed packages — version mismatches and pip's dependency resolver will cause pain. The full-fat approach (like `vllm-wheels-py312-cu129`) just works.
+
+---
+
+## 2026-02-02 - Session 7: Weighted Entropy vs TIR Solver Analysis
+
+### Submissions Analyzed
+1. **Weighted entropy** (`sonphamorg/41-50-aimo-3-weighted-entropy`) — Score: **38/50** (success)
+2. **TIR solver** (`sonphamorg/aimo3-qwen3-30b-tir-solver`) — **Failed**
+
+### Weighted Entropy Notebook — Key Architecture
+- **Model**: `gpt-oss-120b` (MoE, 117B total / 5.1B active, MXFP4) via `danielhanchen/gpt-oss-120b`
+- **Library**: `openai_harmony` for tokenization, chat templates, stop token management
+- **Answer selection**: Entropy-weighted voting — each attempt's mean token entropy (Shannon, from top-5 logprobs) is computed; answers weighted by `1/entropy` (confident answers count more)
+- **Code execution**: 16 persistent Jupyter kernels via `jupyter_client.KernelManager` (stateful across turns)
+- **TIR**: Up to 128 turns per attempt, streaming with logprobs
+- **Parallelism**: 16 threaded workers → vLLM OpenAI-compatible server
+- **Config**: 8 attempts, early stop at 4 matching, temp=1.0, min_p=0.02, FP8 KV cache
+- **Time budget**: Dynamic per-problem (270-900s), notebook limit 17400s
+- **Dependencies**: `unsloth`, `trl`, `vllm`, `openai_harmony` from `aimo-3-utils` wheels tarball
+
+### TIR Solver Notebook — Key Architecture
+- **Model**: Qwen3-30B-A3B (MoE, 30B total / 3B active)
+- **Code execution**: Subprocess-based (stateless, fresh process per code block)
+- **Answer selection**: Simple majority vote (`Counter.most_common`)
+- **TIR**: 3 rounds max
+- **Parallelism**: Sequential vLLM Python API batch
+- **Config**: 10 prompts (5 unique × 2), temp=0.6, single seed
+
+### Why the Weighted Entropy Notebook Succeeded
+1. **Model quality**: gpt-oss-120b >> Qwen3-30B-A3B on olympiad math
+2. **Stateful code execution**: Persistent Jupyter kernels allow multi-step computations across turns
+3. **Deep TIR**: 128 turns allows real iterative problem-solving and self-correction
+4. **Entropy weighting**: Filters out low-confidence guesses in favor of answers the model was sure about
+5. **Parallel workers**: 16 concurrent attempts maximize samples within time budget
+6. **Streaming logprobs**: Enables entropy calculation + early answer detection mid-stream
+
+### Why the TIR Solver Failed (TECHNICAL — not approach failure)
+The TIR solver was **never successfully evaluated** on the competition problems. It failed due to **infrastructure/dependency errors** (vLLM install conflicts, wheel compatibility issues, runtime crashes) before it could solve any problems. The approach itself (TIR + majority vote with Qwen3-30B-A3B) was never tested against the actual problem set. This is distinct from the weighted entropy notebook which ran to completion and scored 38/50.
+
+### Proposed Improvements (build on weighted entropy notebook)
+- **A**: Increase to 12 attempts (from 8), early stop at 5
+- **B**: Extract integers from code output as fallback answers (with entropy penalty)
+- **C**: Dynamic TIR depth — go deeper on hard problems when early attempts disagree
+- **D**: Add code-first prompt variants for genuine diversity (not just temperature)
+- **E**: Hybrid scoring: `score = Σ(1/entropy) + 0.1 * vote_count` for tiebreaking
+
+### Key Lesson
+The winning formula is: **strong model + deep stateful TIR + confidence-weighted answer selection**. Future iterations should always build on the weighted entropy notebook as the base.
+
+### Improvement Notebook Created: `improv1_entropy_plus`
+- **Kaggle URL**: https://www.kaggle.com/code/sonphamorg/aimo3-entropy-plus-v1
+- **Local path**: `kaggle_submissions/improv1_entropy_plus/`
+- **Base**: Weighted entropy notebook (score 38), same model (gpt-oss-120b), same deps (aimo-3-utils)
+- **Changes from base**:
+  - **A. More attempts**: 8→12, early stop 4→5 (16 workers handle this without wall-time increase)
+  - **B. Code output fallback**: If no `\boxed{}` found, extract last integer from successful code output; penalized with `code_fallback_entropy=8.0` so it's low-priority in scoring
+  - **D. Prompt diversity**: 8 reasoning + 2 code-first + 2 case-analysis prompts (was: 1 prompt for all attempts)
+  - **E. Hybrid scoring**: `score = Σ(1/entropy) + 0.1 * vote_count` — tiebreaker favors answers with more votes
+- **VRAM**: No increase — same model, same vLLM server config, 12 concurrent requests well within `max_num_seqs=256`
+- **Dependencies**: Same `andreasbis/aimo-3-utils` kernel source + `danielhanchen/gpt-oss-120b` model
+
+### Iteration Strategy Plan
+Full plan saved to `.claude/iteration_plan.md` — covers:
+1. Faster evaluation (save-and-replay, local proxy eval, result logging)
+2. Non-finetuning iteration (prompt sweeps, ablation testing, decoupled generation/selection)
+3. Fine-tuning iteration (DPO from competition outputs, progressive model scaling)
+**Next step**: Switch to NVIDIA machine with more VRAM, pull this repo, implement save-and-replay first.
