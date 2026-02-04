@@ -1,6 +1,6 @@
 {
-  "id": "sonphamorg/traces-t4-qwen4b-aime-bulk-tuning",
-  "title": "[Traces] T4 Qwen3-4B AIME Bulk Strategy Tuning",
+  "id": "sonphamorg/traces-t4-qwen3-4b-aime-bulk-strategy-tuning",
+  "title": "traces-t4-qwen3-4b-aime-bulk-strategy-tuning",
   "code_file": "trace_generator.ipynb",
   "language": "python",
   "kernel_type": "notebook",
@@ -9,7 +9,8 @@
   "enable_internet": false,
   "keywords": [],
   "dataset_sources": [
-    "hemishveeraboina/aime-problem-set-1983-2024"
+    "hemishveeraboina/aime-problem-set-1983-2024",
+    "sonphamorg/vllm-wheels-py312-cu129"
   ],
   "kernel_sources": [],
   "competition_sources": [],

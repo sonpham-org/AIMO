@@ -41,12 +41,29 @@
 
 ---
 
+## Skill: Kaggle Authentication
+
+**When to trigger:** Before ANY `kaggle` CLI command (datasets, kernels, competitions, etc.)
+
+**What to do:**
+```bash
+export $(grep KAGGLE_API_TOKEN /home/son/GitHub/AIMO/.env | xargs)
+```
+
+**Key details:**
+- **NEVER use or modify `~/.kaggle/kaggle.json`** — it may contain stale/wrong credentials
+- **ALWAYS** authenticate via environment variable before any `kaggle` CLI command
+- The token is stored in `.env` (gitignored) as `KAGGLE_API_TOKEN=KGAT_...`
+- Kaggle username: `sonphamorg`
+
+---
+
 ## Skill: Kaggle Dataset Upload
 
 **When to trigger:** When uploading wheels, models, or data to Kaggle as a dataset.
 
 **What to do:**
-1. Export the API token: `export KAGGLE_API_TOKEN=<token from .env>`
+1. Authenticate first (see Kaggle Authentication skill above)
 2. Create `dataset-metadata.json` in the data directory with:
    ```json
    {
@@ -59,12 +76,39 @@
 4. For updates: `kaggle datasets version -p /path/to/dir/ -m "version message"`
 
 **Key details:**
-- **NEVER use or modify `~/.kaggle/kaggle.json`** — it may contain stale/wrong credentials
-- **ALWAYS** authenticate via: `export KAGGLE_API_TOKEN=<token from .env>` before any `kaggle` CLI command
-- The token is stored in `.env` (gitignored) as `KAGGLE_API_TOKEN=KGAT_...`
-- Load it with: `export $(grep KAGGLE_API_TOKEN .env | xargs)`
 - Max dataset size: ~20GB
-- Kaggle username: `sonphamorg`
+
+---
+
+## Skill: Kaggle Kernel/Notebook Push
+
+**When to trigger:** When pushing notebooks to Kaggle for execution.
+
+**What to do:**
+1. Authenticate first (see Kaggle Authentication skill above)
+2. Ensure `kernel-metadata.json` exists with proper fields:
+   ```json
+   {
+     "id": "sonphamorg/notebook-slug",
+     "title": "notebook-slug",
+     "code_file": "notebook.ipynb",
+     "language": "python",
+     "kernel_type": "notebook",
+     "is_private": true,
+     "enable_gpu": true,
+     "enable_internet": false,
+     "machine_shape": "NvidiaH100",  // or omit for default T4
+     "dataset_sources": [],
+     "model_sources": ["owner/model-slug"]
+   }
+   ```
+3. Push: `kaggle kernels push` (from the directory containing kernel-metadata.json)
+4. Check status: `kaggle kernels status sonphamorg/notebook-slug`
+
+**Key details:**
+- `machine_shape`: Use `"NvidiaH100"` for H100, omit or use default for T4/P100
+- **IMPORTANT**: `machine_shape` via API push is unreliable - Kaggle may assign P100 instead. After pushing, **manually verify/change GPU type in Kaggle web UI** before running.
+- `model_sources`: Use short format `"owner/model-slug"`, not full path
 
 ---
 

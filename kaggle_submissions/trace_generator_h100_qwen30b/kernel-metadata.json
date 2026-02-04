@@ -1,6 +1,6 @@
 {
   "id": "sonphamorg/traces-h100-qwen30b-aimo3-transfer",
-  "title": "[Traces] H100 Qwen3-30B AIMO3 Transfer Check",
+  "title": "traces-h100-qwen30b-aimo3-transfer",
   "code_file": "trace_generator.ipynb",
   "language": "python",
   "kernel_type": "notebook",
@@ -9,7 +9,8 @@
   "enable_internet": false,
   "keywords": [],
   "dataset_sources": [
-    "sonphamorg/aimo3-reference-problems"
+    "sonphamorg/aimo3-reference-problems",
+    "sonphamorg/vllm-wheels-py312-cu129"
   ],
   "kernel_sources": [],
   "competition_sources": [
@@ -17,5 +18,6 @@
   ],
   "model_sources": [
     "qwen-lm/qwen-3"
-  ]
+  ],
+  "machine_shape": "NvidiaH100"
 }

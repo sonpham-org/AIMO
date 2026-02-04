@@ -1,6 +1,6 @@
 {
-  "id": "sonphamorg/traces-t4-qwen8b-aime-validation",
-  "title": "[Traces] T4 Qwen3-8B AIME Validation",
+  "id": "sonphamorg/traces-t4-qwen3-8b-aime-val",
+  "title": "traces-t4-qwen3-8b-aime-val",
   "code_file": "trace_generator.ipynb",
   "language": "python",
   "kernel_type": "notebook",
@@ -9,7 +9,8 @@
   "enable_internet": false,
   "keywords": [],
   "dataset_sources": [
-    "hemishveeraboina/aime-problem-set-1983-2024"
+    "hemishveeraboina/aime-problem-set-1983-2024",
+    "sonphamorg/vllm-wheels-py312-cu129"
   ],
   "kernel_sources": [],
   "competition_sources": [],

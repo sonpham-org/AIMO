@@ -18,5 +18,6 @@
   ],
   "model_sources": [
     "danielhanchen/gpt-oss-120b"
-  ]
+  ],
+  "machine_shape": "NvidiaH100"
 }
