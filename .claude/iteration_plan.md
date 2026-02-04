@@ -2,20 +2,62 @@
 
 > Created: 2026-02-02, Session 7
 > Updated: 2026-02-02, Session 8 — trace generation + replay system implemented
-> Context: Score 38/50 with weighted entropy notebook. Need faster iteration loops.
+> Updated: 2026-02-04, Session 12 — switched to Qwen3-8B for faster trace generation
+> Context: Score **40/50** with entropy-gated consensus (feb3). Iterating on verification methods.
 
 ## Current State
 
 ### What We Have
-- **Best submission**: `sonphamorg/41-50-aimo-3-weighted-entropy` — score **38/50**
+- **Best submission**: `sonphamorg/aimo3-entropy-gated-feb3` — score **40/50** ⭐
   - Model: `gpt-oss-120b` (MoE, 117B/5.1B active, MXFP4)
-  - Key: entropy-weighted answer selection, 16 persistent Jupyter kernels, 128-turn TIR, streaming logprobs
-- **Improvement v1**: `sonphamorg/aimo3-entropy-plus-v1` — pushed, awaiting results
-- **Trace + Replay System**: `scripts/generate_traces.py` + `scripts/replay_selection.py` — READY TO RUN
+  - Key: entropy-gated consensus (filter by entropy < 5.0, require ≥2 votes)
+- **Feb4 submission**: `sonphamorg/aimo3-verified-consensus-feb4` — PENDING
+  - Adds Option B (code verification) + Option C (self-consistency boost)
+- **Trace + Replay System**: `scripts/generate_traces.py` + `scripts/replay_selection.py` — READY
+- **Ablation testing**: `scripts/ablation_test.py` — tests 9 selection strategies
 
 ### Local Test Data
 - `data/aimo3/reference.csv` — 53 AIMO3 reference problems with ground truth
-- `data/aimo3/test.csv` — 3 trivial stub problems (smoke test only)
+- `data/aime/aime_train_100.csv` — 100 AIME problems (random subset for overnight runs)
+- `data/aime/aime_train_2005_2022.csv` — 524 AIME problems (full set)
+
+---
+
+## OVERNIGHT RUN (2026-02-04)
+
+### Currently Running
+- **Model**: Qwen3-8B (fast, ~50 tok/s, generates shorter responses than DeepSeek-R1)
+- **Dataset**: 100 AIME problems × 12 samples = 1,200 traces
+- **Output**: `output/traces/aime_qwen3_8b_20260204_081902/`
+- **Server**: llama-server on port 8081 (PID varies)
+- **Generator**: `generate_traces.py` (PID varies)
+
+### Why Qwen3-8B instead of gpt-oss-120b or DeepSeek-R1?
+- DeepSeek-R1-0528-Qwen3-8B generates **13k+ tokens per response** (very slow)
+- gpt-oss-120b is slower (~20 tok/s vs ~50 tok/s for Qwen3-8B)
+- **Goal**: More traces for statistical significance on selection strategies
+- Selection strategies should transfer across models
+
+### Monitor Progress
+```bash
+# Check process
+ps aux | grep generate_traces
+
+# Count completed traces
+ls output/traces/aime_qwen3_8b_*/problem_*.json 2>/dev/null | wc -l
+
+# View log
+tail -f logs/trace_qwen3_8b.log
+```
+
+### When Done (morning)
+```bash
+# Run ablation testing on new traces
+python3 scripts/ablation_test.py --traces-dir output/traces/aime_qwen3_8b_*/
+
+# Run full selection sweep (138 strategies)
+python3 scripts/replay_selection.py sweep --traces-dir output/traces/aime_qwen3_8b_*/
+```
 
 ---
 
