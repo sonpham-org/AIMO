@@ -1,0 +1,9 @@
+{
+  "title": "vllm-offline-install-cp312-fix",
+  "id": "sonphamorg/vllm-offline-install-cp312-fix",
+  "licenses": [
+    {
+      "name": "CC0-1.0"
+    }
+  ]
+}

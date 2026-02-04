@@ -1,0 +1,19 @@
+{
+  "id": "sonphamorg/traces-t4-qwen8b-aime-validation",
+  "title": "[Traces] T4 Qwen3-8B AIME Validation",
+  "code_file": "trace_generator.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": false,
+  "keywords": [],
+  "dataset_sources": [
+    "hemishveeraboina/aime-problem-set-1983-2024"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [],
+  "model_sources": [
+    "qwen-lm/qwen-3"
+  ]
+}

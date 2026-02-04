@@ -1,7 +1,7 @@
 {
-  "id": "sonphamorg/traces-h100-gptoss120b-aimo3-final-tuning",
-  "title": "[Traces] H100 gpt-oss-120b AIMO3 Final Tuning",
-  "code_file": "kaggle_trace_generator.ipynb",
+  "id": "sonphamorg/traces-h100-qwen30b-aimo3-transfer",
+  "title": "[Traces] H100 Qwen3-30B AIMO3 Transfer Check",
+  "code_file": "trace_generator.ipynb",
   "language": "python",
   "kernel_type": "notebook",
   "is_private": true,
@@ -11,13 +11,11 @@
   "dataset_sources": [
     "sonphamorg/aimo3-reference-problems"
   ],
-  "kernel_sources": [
-    "andreasbis/aimo-3-utils"
-  ],
+  "kernel_sources": [],
   "competition_sources": [
     "ai-mathematical-olympiad-progress-prize-3"
   ],
   "model_sources": [
-    "danielhanchen/gpt-oss-120b"
+    "qwen-lm/qwen-3"
   ]
 }

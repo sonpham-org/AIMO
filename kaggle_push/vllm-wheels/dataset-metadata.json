@@ -1,0 +1,9 @@
+{
+  "title": "vLLM 0.8.0 Full Wheels for Python 3.12 (CUDA 12.4)",
+  "id": "sonphamorg/vllm-wheels-cp312-full",
+  "licenses": [
+    {
+      "name": "Apache 2.0"
+    }
+  ]
+}
