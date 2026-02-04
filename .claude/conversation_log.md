@@ -671,3 +671,70 @@ for r in confident_results:
 1. Monitor feb3 submission result
 2. Fix trace generators (T4 notebooks should work for small models)
 3. If feb3 scores well, tune thresholds using trace data
+
+---
+
+## 2026-02-03 - Session 11: Local Trace Generation Jobs + Feb3 Fixes
+
+### Feb3 Submission Fix
+- **Issue**: Notebook crashed with "Kernel died before replying to kernel_info" during Jupyter kernel initialization
+- **Cause**: Parallel initialization of 16 Jupyter kernels overwhelmed the system
+- **Fix**:
+  - Reduced workers from 16 to 8
+  - Changed kernel init from parallel to sequential with retry logic (3 attempts per kernel)
+- **Status**: v5 pushed, waiting for results
+- **Important**: `machine_shape: "NvidiaH100"` in API push is unreliable - must manually verify/change GPU type in Kaggle web UI
+
+### Kaggle Skills Updated
+- Added "Kaggle Authentication" skill - ALWAYS use `export $(grep KAGGLE_API_TOKEN .env | xargs)` before any kaggle CLI command
+- Added "Kaggle Kernel/Notebook Push" skill with machine_shape notes
+- Updated dataset upload skill to reference authentication skill
+
+### Trace Generator Notebooks Fixed
+All three trace notebooks updated to use offline vLLM wheels:
+- Added `sonphamorg/vllm-wheels-py312-cu129` to dataset_sources
+- Changed pip install to: `pip install --no-index --find-links /kaggle/input/vllm-wheels-py312-cu129/wheels/ vllm`
+- Fixed AIME column detection (`question` vs `problem`)
+
+| Notebook | Model | GPU | Status |
+|----------|-------|-----|--------|
+| traces-t4-qwen3-4b-aime-bulk-strategy-tuning | Qwen3-4B | T4 | v4 RUNNING |
+| traces-t4-qwen3-8b-aime-val | Qwen3-8B | T4 | v1 pushed |
+| traces-h100-qwen30b-aimo3-transfer | Qwen3-30B | H100 | v1 ERROR (GPU quota) |
+
+### Local Trace Generation Jobs Created
+
+**Scripts**:
+- `scripts/run_traces_amd.sh` - For AMD machine (this machine, Radeon 8060S)
+- `scripts/run_traces_nvidia.sh` - For NVIDIA machine (4090)
+
+**AMD Job** (this machine):
+```bash
+# Run with defaults (Qwen3-8B, 8 samples)
+./scripts/run_traces_amd.sh
+
+# Or customize:
+MODEL_PATH=~/models/Qwen3-4B-Q4_K_M.gguf MODEL_NAME=Qwen3-4B N_SAMPLES=12 ./scripts/run_traces_amd.sh
+```
+
+**NVIDIA Job** (pull repo on NVIDIA machine and run):
+```bash
+git pull origin main
+./scripts/run_traces_nvidia.sh
+
+# For larger model with vLLM:
+USE_VLLM=true MODEL_PATH=/path/to/hf/model ./scripts/run_traces_nvidia.sh
+```
+
+**Available Local Models** (`~/models/`):
+- Qwen3-4B-Q4_K_M.gguf (2.5GB)
+- Qwen3-8B-Q4_K_M.gguf (5GB)
+- Qwen3-14B-Q4_K_M.gguf (9GB)
+- Qwen3-30B-A3B-Q4_K_M.gguf (18.5GB)
+- Qwen3-32B-Q4_K_M.gguf (19.8GB)
+- DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf (4.7GB)
+- DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf (19.9GB)
+- DeepSeek-R1-Distill-Llama-70B-Q4_K_M.gguf (42.5GB)
+- gpt-oss-120b/ (HF format, 65GB)
+
+**Output**: Traces saved to `output/traces/{gpu}_{model}_{timestamp}/`
