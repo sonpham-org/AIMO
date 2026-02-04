@@ -760,3 +760,57 @@ git pull origin main
 ./scripts/run_traces_nvidia.sh
 ```
 
+---
+
+## 2026-02-04 - Session 12: Feb4 Verified Submission + Ablation Testing Setup
+
+### Feb3 Submission Result
+- **Score: 40/50** — Our best score so far!
+- Entropy-gated consensus approach is working
+
+### Feb4 Submission: Verified Consensus (Option B + C)
+**Location**: `kaggle_submissions/feb4_verified/`
+
+**New Features** (on top of feb3):
+1. **Option C - Self-consistency boost**: Track ALL `\boxed{}` answers during reasoning, boost repeated answers
+2. **Option B - Code verification**: When top-2 candidates are close (ratio < 1.5), check if code output supports either
+
+**Key Parameters (educated guesses, pending ablation)**:
+```python
+code_answer_boost = 1.5      # Boost when code output matches boxed answer
+repeat_answer_boost = 1.3    # Boost per repeated answer during reasoning
+error_penalty = 0.6          # Penalty for attempts with Python errors
+verify_threshold = 1.5       # Verify if top/second score ratio < this
+verify_timeout = 15          # Timeout for verification code execution
+```
+
+**Status**: Ready to push (Kaggle auth not configured on this machine)
+
+### Ablation Testing Script Created
+**Location**: `scripts/ablation_test.py`
+
+Tests 9 configurations:
+1. Simple majority vote (no filter)
+2. Entropy-gated (threshold 0.5)
+3. Option C only (self-consistency)
+4. Option B only (code verification)
+5. B + C combined
+6. B + C (strict entropy 0.3)
+7. B + C (relaxed entropy 0.7)
+8. B + C (stronger repeat boost 1.5)
+9. B + C (stronger code boost 2.0)
+
+**Usage** (when traces are ready):
+```bash
+python3 scripts/ablation_test.py --traces-dir output/traces/aime_amd_20260204_073853
+```
+
+### Trace Generation Status
+- **AMD**: DeepSeek-R1-0528-Qwen3-8B on AIME 2005-2022 (524 problems × 12 samples)
+- **PID**: 425808 (generate_traces.py), 425365 (llama-server on port 8081)
+- **Output**: `output/traces/aime_amd_20260204_073853/`
+- **Progress**: Just started, no problem traces yet
+
+### Key Insight from Ablation Pre-test
+Entropy threshold 0.3 is too strict — only 2/12 attempts pass, breaking consensus. Current traces (gpt-oss-120b) show typical entropy 0.25-0.55. Use threshold 0.5 as default.
+
