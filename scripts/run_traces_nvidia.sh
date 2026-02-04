@@ -6,6 +6,11 @@
 set -e
 cd "$(dirname "$0")/.."
 
+# Activate venv if exists
+if [ -f ".venv/bin/activate" ]; then
+    source .venv/bin/activate
+fi
+
 # Configuration - adjust for your setup
 MODEL_PATH="${MODEL_PATH:-$HOME/models/Qwen3-8B-Q4_K_M.gguf}"
 MODEL_NAME="${MODEL_NAME:-Qwen3-8B}"
@@ -53,7 +58,7 @@ else
             --port "$API_PORT" \
             --n-gpu-layers "$N_GPU_LAYERS" \
             --ctx-size "$CTX_SIZE" \
-            --flash-attn \
+            --flash-attn auto \
             --host 0.0.0.0 \
             > logs/llama_server_nvidia.log 2>&1 &
     fi

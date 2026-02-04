@@ -1,14 +1,19 @@
 #!/bin/bash
 # AMD Trace Generation Job
-# Run on AMD machine (Radeon 8060S / ROCm)
+# Run on AMD machine (Radeon 8060S / Vulkan)
 # Uses llama-server with GGUF models
 
 set -e
 cd "$(dirname "$0")/.."
 
+# Activate venv if exists
+if [ -f ".venv/bin/activate" ]; then
+    source .venv/bin/activate
+fi
+
 MODEL_PATH="${MODEL_PATH:-$HOME/models/Qwen3-8B-Q4_K_M.gguf}"
 MODEL_NAME="${MODEL_NAME:-Qwen3-8B}"
-API_PORT="${API_PORT:-8080}"
+API_PORT="${API_PORT:-8081}"  # Use 8081 to avoid conflict with other servers
 N_SAMPLES="${N_SAMPLES:-8}"
 MAX_TURNS="${MAX_TURNS:-12}"
 TEMPERATURE="${TEMPERATURE:-0.7}"
@@ -33,7 +38,7 @@ else
         --port "$API_PORT" \
         --n-gpu-layers "$N_GPU_LAYERS" \
         --ctx-size "$CTX_SIZE" \
-        --flash-attn \
+        --flash-attn auto \
         --host 0.0.0.0 \
         > logs/llama_server_amd.log 2>&1 &
 
