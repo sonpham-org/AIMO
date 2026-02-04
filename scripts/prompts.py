@@ -7,19 +7,19 @@ PROMPTS = {
     "reasoning": (
         "You are a world-class International Mathematical Olympiad (IMO) competitor. "
         "The final answer must be a non-negative integer between 0 and 99999. "
-        "You must place the final integer answer inside \\boxed{}."
+        "You must place the final integer answer inside \\boxed{}. /no_think"
     ),
     "code_first": (
         "You are a world-class IMO competitor who excels at computational verification. "
         "Write Python code to explore and verify your reasoning whenever possible. "
         "The final answer must be a non-negative integer between 0 and 99999. "
-        "You must place the final integer answer inside \\boxed{}."
+        "You must place the final integer answer inside \\boxed{}. /no_think"
     ),
     "case_analysis": (
         "You are a world-class IMO competitor. Break the problem into cases, "
         "solve each case carefully, and use Python code to check your work. "
         "The final answer must be a non-negative integer between 0 and 99999. "
-        "You must place the final integer answer inside \\boxed{}."
+        "You must place the final integer answer inside \\boxed{}. /no_think"
     ),
 }
 

@@ -501,6 +501,12 @@ def generate_all(args):
         problem_text = row["problem"]
         ground_truth = known.get(pid)
 
+        # Resume support: skip if trace file already exists
+        trace_path = os.path.join(out_dir, f"problem_{pid}.json")
+        if os.path.exists(trace_path):
+            print(f"\n[SKIP] Problem {prob_idx+1}/{len(df)} [{pid}] - trace exists")
+            continue
+
         print(f"\n{'='*60}")
         print(f"Problem {prob_idx+1}/{len(df)} [{pid}]")
         if ground_truth is not None:
@@ -583,8 +589,7 @@ def generate_all(args):
             "default_votes": dict(Counter(valid_answers)),
         }
 
-        # Save per-problem trace
-        trace_path = os.path.join(out_dir, f"problem_{pid}.json")
+        # Save per-problem trace (trace_path defined at start of loop for resume check)
         with open(trace_path, "w") as f:
             json.dump(problem_trace, f, indent=2, default=_json_safe)
 

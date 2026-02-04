@@ -55,8 +55,25 @@ def normalize_aime_format(df: pd.DataFrame) -> pd.DataFrame:
     df["id"] = df.apply(
         lambda r: f"aime_{r['Year']}_{r['Problem Number']}", axis=1
     )
-    df["problem"] = df["Problem"]
-    df["answer"] = df["Answer"].astype(int)
+    # HuggingFace dataset uses "Question", some sources use "Problem"
+    problem_col = "Question" if "Question" in df.columns else "Problem"
+    df["problem"] = df[problem_col]
+    # Handle answers like "080 or 081 (both were accepted)" - extract first number
+    def parse_answer(x):
+        import re
+        if pd.isna(x):
+            return None
+        s = str(x).strip()
+        # Extract first integer
+        match = re.match(r'^(\d+)', s)
+        if match:
+            return int(match.group(1))
+        return None
+
+    df["answer"] = df["Answer"].apply(parse_answer)
+    # Drop rows with unparseable answers
+    df = df.dropna(subset=["answer"])
+    df["answer"] = df["answer"].astype(int)
 
     # Keep year for splitting
     df["year"] = df["Year"].astype(int)
