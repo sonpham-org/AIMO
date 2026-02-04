@@ -738,3 +738,25 @@ USE_VLLM=true MODEL_PATH=/path/to/hf/model ./scripts/run_traces_nvidia.sh
 - gpt-oss-120b/ (HF format, 65GB)
 
 **Output**: Traces saved to `output/traces/{gpu}_{model}_{timestamp}/`
+
+### Session 11 Continued - Trace Generation Running
+
+**Fixed Issues:**
+1. `--flash-attn` flag now requires explicit value (`on`, `off`, or `auto`) - updated both scripts to use `--flash-attn auto`
+2. Scripts now activate venv to ensure dependencies are available
+3. AMD script changed to port 8081 to avoid conflict with other servers
+
+**Current Status:**
+- Qwen3-8B llama-server running on port 8081 (PID 394788)
+- Trace generation running (PID 395564) with:
+  - Model: Qwen3-8B
+  - 10 problems × 8 samples = 80 traces
+  - Output: `output/traces/amd_Qwen3-8B_20260203_220536/`
+- Code pushed to GitHub (commit 40b47e7)
+
+**NVIDIA Machine Instructions:**
+```bash
+git pull origin main
+./scripts/run_traces_nvidia.sh
+```
+
