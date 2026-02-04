@@ -1,16 +1,15 @@
 {
-  "id": "sonphamorg/aimo3-trace-generator",
-  "title": "AIMO3 Trace Generator",
-  "code_file": "kaggle_trace_generator.ipynb",
+  "id": "sonphamorg/aimo3-entropy-gated-feb3",
+  "title": "aimo3-entropy-gated-feb3",
+  "code_file": "kaggle_submission.ipynb",
   "language": "python",
   "kernel_type": "notebook",
   "is_private": true,
   "enable_gpu": true,
+  "enable_tpu": false,
   "enable_internet": false,
-  "keywords": [],
-  "dataset_sources": [
-    "sonphamorg/aimo3-reference-problems"
-  ],
+  "keywords": ["gpu"],
+  "dataset_sources": [],
   "kernel_sources": [
     "andreasbis/aimo-3-utils"
   ],

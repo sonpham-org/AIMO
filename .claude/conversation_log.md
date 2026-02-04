@@ -601,3 +601,73 @@ kaggle kernels push -p .
 3. Run with H100 GPU, 9h timeout
 4. Download traces
 5. Run `python scripts/replay_selection.py sweep --traces-dir ./traces/`
+
+---
+
+## 2026-02-03 - Session 10: Feb 3 Submission + Research
+
+### Submission Status Summary
+- **41-50-aimo-3-weighted-entropy**: Score **38** (baseline)
+- **aimo3-entropy-plus-v1**: Score **33** (regression - prompt diversity hurt)
+
+### Research Findings (arXiv 2025-2026)
+
+Key papers on answer selection and confidence:
+
+1. **[CISC: Confidence Improves Self-Consistency](https://arxiv.org/pdf/2502.06233)** - Weighted voting with confidence scores beats standard self-consistency, 46% cost reduction
+2. **[Deep Think with Confidence](https://arxiv.org/pdf/2508.15260)** - Filter to top-η% confident traces BEFORE voting (filtering threshold η)
+3. **[rStar-Math](https://arxiv.org/html/2501.04519v1)** - Keep only answers with ≥3 consistent solutions → Qwen2.5-Math-7B improved from 58.8% to 89.4% on MATH
+4. **[Entropy-Guided Loop](https://arxiv.org/html/2509.00079v1)** - Captures "discarded" probability distributions; achieves 95% of reasoning-model performance at 1/3 cost
+5. **[Think Just Enough](https://arxiv.org/html/2510.08146)** - Sequence-level entropy as confidence signal with closed-form thresholds
+
+### Why Entropy-Plus Regressed (38 → 33)
+Based on research:
+- Prompt diversity (code-first, case prompts) likely worse than pure reasoning
+- Code fallback extracted wrong integers, adding noise
+- More samples (12) with 4 bad prompts < 8 samples with 8 good prompts
+
+### Feb 3 Submission: Entropy-Gated Consensus
+
+**Strategy**: Filter → Then Weight (research-backed)
+
+**Implementation** (`kaggle_submissions/feb3_entropy_gated/`):
+1. **8 attempts, all reasoning prompts** (revert from 12 mixed)
+2. **Entropy threshold filter** - Only consider answers with entropy < 5.0
+3. **Consensus requirement** - Answer must have ≥2 votes to be candidate
+4. **Entropy-weighted scoring** among filtered candidates only
+5. **Fallback** - If filtering too aggressive, use simple majority
+
+**Key Code Change** (`_select_answer_gated()`):
+```python
+# Stage 1: Filter by entropy threshold
+confident_results = [r for r in valid_results if r['Entropy'] < 5.0]
+
+# Stage 2: Require consensus
+candidates = {ans: cnt for ans, cnt in votes.items() if cnt >= 2}
+
+# Stage 3: Entropy-weight among candidates
+for r in confident_results:
+    if r['Answer'] in candidates:
+        scores[r['Answer']] += 1.0 / max(r['Entropy'], 0.1)
+
+# Stage 4: Fallback to simple majority if filtering too aggressive
+```
+
+**Kaggle URL**: https://www.kaggle.com/code/sonphamorg/aimo3-entropy-gated-feb3
+**Status**: RUNNING
+
+### Trace Generator Notebooks
+
+| Notebook | Model | Dataset | Status |
+|----------|-------|---------|--------|
+| `aimo3-trace-generator` | gpt-oss-120b | AIMO3 ref | ERROR (P100 assigned, needs H100) |
+| `traces-t4-qwen3-4b-aime-bulk-strategy-tuning` | Qwen3-4B | AIME | ERROR |
+| `traces-t4-qwen8b-aime-validation` | Qwen3-8B | AIME | Not pushed (GPU limit) |
+| `traces-h100-qwen30b-aimo3-transfer` | Qwen3-30B | AIMO3 | Not pushed (GPU limit) |
+
+**Issue**: H100 notebooks get P100 because `enable_gpu: true` doesn't specify GPU type. H100 only assigned for actual competition submissions.
+
+### Next Steps
+1. Monitor feb3 submission result
+2. Fix trace generators (T4 notebooks should work for small models)
+3. If feb3 scores well, tune thresholds using trace data
