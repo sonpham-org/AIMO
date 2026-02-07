@@ -1,17 +1,29 @@
 logs/
-output/
 *.log
 submission.csv
 problems_extracted.csv
 problems_from_pdf.csv
 .venv/
+.venv-tinker/
 __pycache__/
 .env
 *.whl
-kaggle_submissions/*/wheels/
-kaggle_submissions/*/vllm-cp312-fix/
-kaggle_submissions/*/vllm-wheels/
-kaggle_submissions/*/vllm-wheels-slim/
+
+# Output directories
+data/output/
+fine_tuning/output/
+trace_gen/output/
+inference_strategy/output/
+submissions/output/
+
+# Kaggle wheel dirs (legacy and new paths)
+submissions/*/wheels/
+submissions/*/vllm-cp312-fix/
+submissions/*/vllm-wheels/
+submissions/*/vllm-wheels-slim/
+kaggle_push/*/wheels/
 vllm_wheels/
 vllm_dataset/
+
+# Data
 data/aime/*.csv

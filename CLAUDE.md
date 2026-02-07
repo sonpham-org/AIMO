@@ -11,10 +11,10 @@
 ## Creating New Submission Notebooks
 
 ### Quick Start: Copy feb3 and modify CFG only
-The base notebook is `kaggle_submissions/feb3_entropy_gated/kaggle_submission.ipynb` (scored **40/50**).
+The base notebook is `submissions/feb3_entropy_gated/kaggle_submission.ipynb` (scored **40/50**).
 
 To create a new variant:
-1. Copy `feb3_entropy_gated/` to new directory (e.g., `feb5_more_attempts/`)
+1. Copy `feb3_entropy_gated/` to new directory inside `submissions/`
 2. Update `kernel-metadata.json` with new id/title
 3. **Only modify the CFG class** — the rest of the code is stable
 
