@@ -206,12 +206,15 @@ def solve_once(
     sandbox: Sandbox,
     logprobs_n: int = 5,
     extra_params: Optional[Dict] = None,
+    no_think: bool = False,
 ) -> Dict[str, Any]:
     """Run one TIR attempt: reason -> code -> verify -> answer.
 
     Returns a rich attempt dict with all data needed for offline replay.
     """
     user_message = f"{problem_text} {PREFERENCE_PROMPT}"
+    if no_think:
+        user_message += " /no_think"
     messages = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_message},
@@ -480,6 +483,7 @@ def generate_all(args):
         "prompt_mix": {name: sum(1 for n, _ in prompt_seq if n == name)
                        for name in set(n for n, _ in prompt_seq)},
         "extra_params": extra_params,
+        "no_think": args.no_think,
         "timestamp": timestamp,
         "n_problems": len(df),
     }
@@ -534,6 +538,7 @@ def generate_all(args):
                 sandbox=sandbox,
                 logprobs_n=args.logprobs,
                 extra_params=extra_params if extra_params else None,
+                no_think=args.no_think,
             )
             dt = time.time() - t0
 
@@ -679,6 +684,8 @@ def main():
                         help="Prompt mix, e.g. 'reasoning:8,code_first:2,case_analysis:2'")
     parser.add_argument("--output-dir", default=None,
                         help="Output directory for traces")
+    parser.add_argument("--no-think", action="store_true",
+                        help="Append /no_think to disable Qwen3 thinking mode (5x faster)")
 
     args = parser.parse_args()
     generate_all(args)

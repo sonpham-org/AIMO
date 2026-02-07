@@ -1,0 +1,16 @@
+{
+  "id": "sonphamorg/aimo3-feb7-adaptive",
+  "title": "aimo3-feb7-adaptive",
+  "code_file": "kaggle_submission.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "dataset_sources": [],
+  "kernel_sources": ["andreasbis/aimo-3-utils"],
+  "competition_sources": ["ai-mathematical-olympiad-progress-prize-3"],
+  "model_sources": ["danielhanchen/gpt-oss-120b"],
+  "machine_shape": "NvidiaH100"
+}

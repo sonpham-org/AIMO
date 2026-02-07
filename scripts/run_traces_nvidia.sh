@@ -100,6 +100,7 @@ python scripts/generate_traces.py \
     --competition aimo3 \
     --prompt-mix "reasoning:8,code_first:2,case_analysis:2" \
     --logprobs 5 \
+    --no-think \
     --output-dir "$OUTPUT_DIR"
 
 echo ""

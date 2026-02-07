@@ -1,0 +1,17 @@
+{
+  "id": "sonphamorg/aimo3-curation-test-feb6",
+  "title": "aimo3-curation-test-feb6",
+  "code_file": "kaggle_submission.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "dataset_sources": [
+    "jeannkouagou/aimo3-tool-integrated-reasoning"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}
