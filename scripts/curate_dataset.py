@@ -257,6 +257,25 @@ def load_bigmath(path: str, max_rows: int = 0) -> list[Sample]:
     return samples
 
 
+def _has_repetition(text: str, block_size: int = 80) -> bool:
+    """Fast repetition check using hashing (O(n) instead of O(n^2) regex)."""
+    if len(text) < block_size * 2:
+        return False
+    # Check if any block_size substring appears again within the next block_size*3 chars
+    seen = {}
+    step = block_size // 2
+    for i in range(0, len(text) - block_size, step):
+        chunk = text[i:i + block_size]
+        h = hash(chunk)
+        if h in seen:
+            prev_i = seen[h]
+            # Verify (hash collision check) and ensure it's a real repeat
+            if text[prev_i:prev_i + block_size] == chunk and i - prev_i >= block_size:
+                return True
+        seen[h] = i
+    return False
+
+
 # ---------------------------------------------------------------------------
 # Stage 1: Hard Filters
 # ---------------------------------------------------------------------------
@@ -290,8 +309,8 @@ def hard_filter(sample: Sample) -> tuple[bool, str]:
         if "final answer" not in text.lower() and "the answer is" not in text.lower():
             return False, "no_answer_marker"
 
-    # Repetition check (100+ char repeated substring)
-    if re.search(r"(.{80,})\1", text):
+    # Repetition check — use sliding window instead of catastrophic regex
+    if _has_repetition(text, block_size=80):
         return False, "repetitive"
 
     return True, ""
@@ -461,7 +480,7 @@ def score_quality(sample: Sample) -> dict[str, float]:
     has_steps = bool(re.search(r"step\s*\d|^\d+[\.\)]", text, re.MULTILINE | re.IGNORECASE))
     has_boxed = "boxed{" in text
     uses_sympy = "sympy" in text.lower() or "from sympy" in text
-    has_repetition = bool(re.search(r"(.{60,})\1", text))
+    has_repetition = _has_repetition(text, block_size=60)
 
     scores["structure"] = (
         0.20 * float(has_steps)
@@ -543,36 +562,97 @@ def classify_topic(problem_text: str) -> str:
     return max(topic_scores, key=topic_scores.get)
 
 
-def diversity_select(samples: list[Sample], target: int) -> list[Sample]:
-    """Select target samples with topic-balanced, difficulty-weighted sampling."""
+def diversity_select(samples: list[Sample], target: int,
+                     diversity_mode: str = "topic") -> list[Sample]:
+    """Select target samples with diversity balancing.
+
+    diversity_mode:
+      - "topic": balance by fine-grained topic (19 categories)
+      - "source": balance by source dataset
+      - "difficulty": balance by difficulty bands
+      - "multi": combined topic + source + difficulty
+    """
     # Classify topics
     for s in samples:
         if s.topic is None:
             s.topic = classify_topic(s.problem_text)
 
-    # Group by topic
-    by_topic = defaultdict(list)
+    if diversity_mode == "topic":
+        return _select_balanced(samples, target, key=lambda s: s.topic)
+
+    elif diversity_mode == "source":
+        return _select_balanced(samples, target, key=lambda s: s.source_dataset)
+
+    elif diversity_mode == "difficulty":
+        def diff_band(s):
+            if s.pass_rate is None:
+                return "unknown"
+            elif s.pass_rate <= 0.10:
+                return "very_hard"
+            elif s.pass_rate <= 0.25:
+                return "hard"
+            elif s.pass_rate <= 0.40:
+                return "medium"
+            else:
+                return "easy"
+        return _select_balanced(samples, target, key=diff_band)
+
+    elif diversity_mode == "multi":
+        # Multi-axis: allocate budget across source datasets proportionally,
+        # then within each source, balance by topic
+        by_source = defaultdict(list)
+        for s in samples:
+            by_source[s.source_dataset].append(s)
+
+        # Allocate budget: proportional to sqrt(n) to prevent dominant datasets
+        source_weights = {src: math.sqrt(len(samps)) for src, samps in by_source.items()}
+        total_weight = sum(source_weights.values())
+
+        selected = []
+        for src, samps in by_source.items():
+            src_target = max(int(target * source_weights[src] / total_weight), 5)
+            src_selected = _select_balanced(samps, src_target, key=lambda s: s.topic)
+            selected.extend(src_selected)
+
+        # Trim to target (take highest scores if over)
+        if len(selected) > target:
+            selected.sort(key=lambda s: s.combined_score, reverse=True)
+            selected = selected[:target]
+        # Fill if under
+        elif len(selected) < target:
+            selected_uids = {s.uid for s in selected}
+            remaining = [s for s in samples if s.uid not in selected_uids]
+            remaining.sort(key=lambda s: s.combined_score, reverse=True)
+            selected.extend(remaining[:target - len(selected)])
+
+        return selected[:target]
+
+    else:
+        return _select_balanced(samples, target, key=lambda s: s.topic)
+
+
+def _select_balanced(samples: list[Sample], target: int, key) -> list[Sample]:
+    """Generic balanced selection by any grouping key."""
+    by_group = defaultdict(list)
     for s in samples:
-        by_topic[s.topic].append(s)
+        by_group[key(s)].append(s)
 
-    # Sort each topic by combined score (descending)
-    for topic in by_topic:
-        by_topic[topic].sort(key=lambda s: s.combined_score, reverse=True)
+    # Sort each group by combined score (descending)
+    for group in by_group:
+        by_group[group].sort(key=lambda s: s.combined_score, reverse=True)
 
-    # Balanced round-robin selection
-    topics = sorted(by_topic.keys())
+    # Balanced round-robin
+    groups = sorted(by_group.keys())
     selected = []
-    topic_idx = {t: 0 for t in topics}
 
-    # First pass: ensure minimum per topic
-    min_per_topic = max(target // (len(topics) * 2), 10)
-    for topic in topics:
-        available = by_topic[topic]
-        take = min(min_per_topic, len(available))
+    # First pass: ensure minimum per group
+    min_per_group = max(target // (len(groups) * 2), 5)
+    for group in groups:
+        available = by_group[group]
+        take = min(min_per_group, len(available))
         selected.extend(available[:take])
-        topic_idx[topic] = take
 
-    # Second pass: fill remaining by global score ranking
+    # Second pass: fill remaining by global score
     remaining = target - len(selected)
     if remaining > 0:
         selected_uids = {s.uid for s in selected}
@@ -847,18 +927,42 @@ def run_select(args):
         return samples
 
     # Stage 5: Diversity selection
+    diversity_mode = getattr(args, "diversity", "topic")
     if len(samples) > target:
-        selected = diversity_select(samples, target)
+        selected = diversity_select(samples, target, diversity_mode=diversity_mode)
     else:
         selected = samples
         print(f"STAGE 5 - DIVERSITY: Only {len(samples)} available, keeping all (target was {target})")
 
-    print(f"STAGE 5 - DIVERSITY SELECTION: {len(selected)} selected from {len(samples)}")
+    print(f"STAGE 5 - DIVERSITY SELECTION ({diversity_mode}): {len(selected)} selected from {len(samples)}")
 
     # Topic distribution
     topics = Counter(s.topic for s in selected)
     for topic, count in topics.most_common():
         print(f"  {topic}: {count} ({100*count/len(selected):.1f}%)")
+
+    # Source distribution
+    sources = Counter(s.source_dataset for s in selected)
+    print(f"  --- By source ---")
+    for src, count in sources.most_common():
+        print(f"  {src}: {count} ({100*count/len(selected):.1f}%)")
+
+    # Difficulty distribution
+    diff_bands = Counter()
+    for s in selected:
+        if s.pass_rate is None:
+            diff_bands["unknown"] += 1
+        elif s.pass_rate <= 0.10:
+            diff_bands["very_hard"] += 1
+        elif s.pass_rate <= 0.25:
+            diff_bands["hard"] += 1
+        elif s.pass_rate <= 0.40:
+            diff_bands["medium"] += 1
+        else:
+            diff_bands["easy"] += 1
+    print(f"  --- By difficulty ---")
+    for band, count in sorted(diff_bands.items()):
+        print(f"  {band}: {count} ({100*count/len(selected):.1f}%)")
     print()
 
     # Stage 6: Importance weighting (optional)
@@ -933,6 +1037,9 @@ def main():
     p_select.add_argument("--output", type=str, default=None, help="Output path (default: data/curated_N.jsonl)")
     p_select.add_argument("--max-tir-rows", type=int, default=0,
                            help="Max rows from AIMO3 TIR (0=all)")
+    p_select.add_argument("--diversity", type=str, default="topic",
+                           choices=["topic", "source", "difficulty", "multi"],
+                           help="Diversity mode: topic, source, difficulty, or multi (default: topic)")
     p_select.add_argument("--stop-after", type=str, default=None,
                            choices=["load", "hard_filter", "decontaminate", "difficulty", "scoring"],
                            help="Stop after this stage (for debugging)")

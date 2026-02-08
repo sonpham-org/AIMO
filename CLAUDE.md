@@ -118,18 +118,6 @@ else:
     inference_server.run_local_gateway(('/kaggle/input/ai-mathematical-olympiad-progress-prize-3/test.csv',))
 ```
 
-## Kaggle CLI Authentication
-
-**Preferred method** (works in non-interactive shells):
-```bash
-export $(grep KAGGLE_API_TOKEN /home/son/GitHub/RNA3D/.env) && kaggle kernels push
-```
-
-Credentials also in `~/.bashrc` (before interactive check) for interactive use.
-
-**Common errors:**
-- "Notebook not found" → kernel slug already exists, use a new slug
-- "401 Unauthorized" → regenerate token at kaggle.com/settings → API
 
 ## Submission History
 

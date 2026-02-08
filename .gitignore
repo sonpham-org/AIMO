@@ -27,3 +27,7 @@ vllm_dataset/
 
 # Data
 data/aime/*.csv
+data/downloads/
+data/curated_3000*.jsonl
+data/curated_union.jsonl
+dataset_generation/output/

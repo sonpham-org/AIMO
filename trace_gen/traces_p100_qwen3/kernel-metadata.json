@@ -1,0 +1,19 @@
+{
+  "id": "sonphamorg/traces-p100-qwen3-8b",
+  "title": "traces-p100-qwen3-8b",
+  "code_file": "kaggle_submission.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": ["gpu"],
+  "dataset_sources": [
+    "sonphamorg/aimo3-curated-problems"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [],
+  "model_sources": [],
+  "machine_shape": "NvidiaGpuP100"
+}
