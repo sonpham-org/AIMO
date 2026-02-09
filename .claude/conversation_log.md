@@ -264,3 +264,66 @@ From `imagination_aimo2/local_eval.py` source code:
 - NuminaMath: Pure frequency majority voting
 - CMU-MATH: RM score weighting (but RM is a separate model, not logprobs)
 - **Entropy/logprobs are our unique signal** — not validated by any winner
+
+---
+
+## Feb 8, 2026 - Session 22: Judge Architecture + H100 Traces
+
+### 7-7-2 Judge Architecture (Inspired by ARC-AGI beetree)
+- **Phase 1**: 7 broad attempts (5 TIR + 2 text-only), early stop if 4+ agree
+- **Phase 2**: 7 deep attempts (only if Phase 1 didn't converge)
+- **Phase 3**: 2 judges evaluate all solutions, pick top 2 answers each
+- **Judge-only scoring**: 1st pick = 2pts, 2nd pick = 1pt per judge. Solvers DON'T vote — judges have full authority.
+- **Fallback**: Entropy-gated consensus if both judges fail
+
+### Local Testing Results (Qwen3-8B-Q4_K_M on AMD iGPU)
+- **15-problem comparison**:
+  - Ensemble-8 (majority vote): 10/15 = 67%
+  - 7-7-2 Judge: 13/15 = **87%** (+20%, +3 problems, broke 0)
+  - **CAVEAT**: This was on a weak 8B model. Unclear if judge helps with gpt-oss-120b which is already much stronger. Kaggle run will tell.
+- **50-problem AIME test** (started, partially completed):
+  - Judge-772: 4/17 (23.5%) — Qwen3-8B too weak for AIME
+  - Ensemble-8: 2/4 (50%) — only 4 problems completed before process died
+  - Low accuracy expected with 8B model on competition-level problems
+
+### H100 Trace Data Downloaded and Analyzed
+- **74 problems × 16 samples = 1,184 traces** from gpt-oss-120b on H100
+- Sources: 35 aimo3_hard, 25 bigmath, 13 limo, 1 genselect
+- **48.2% sample accuracy** (limo: 89%, bigmath: 57%, aimo3_hard: 28%)
+- **Oracle upper bound: 78%** (58/74 problems have ≥1 correct in 16 samples)
+- **Majority vote: 57%** (42/74) — 21-point gap = room for better selection
+- All 3 selection strategies (majority, entropy-gated, entropy-weighted) tie at 42/74
+
+### Key Signal Analysis (Correct vs Incorrect)
+| Signal | Correct | Incorrect | Insight |
+|--------|---------|-----------|---------|
+| Entropy | 0.751 | 0.909 | Lower = better |
+| Tokens | 3,783 | 6,166 | Shorter = better |
+| Code calls | 2.0 | 4.4 | Fewer = better |
+| ngram_rep_4 | 0.070 | 0.112 | Less repetition = better |
+| Time | 19.8s | 32.3s | Faster = better |
+
+### Data Quality Issues (saved in `docs/math_problems.md`)
+- 2 problems have answers leaked in problem text (remove from training)
+- ~7 problems have suspicious ground truths (need re-validation)
+- 11.1% of samples have answer=None (turn limit exhaustion)
+
+### Notebooks Created/Updated
+- `submissions/feb8_judge_772/` — **Pushed to Kaggle** (v3, RUNNING)
+  - `judge_max_tokens = 16384` (was 4096), `trace_max_chars = 6000` (was 3000)
+  - Judge-only scoring, 2 judges, 7+7+2 architecture
+- `submissions/feb8_judge/` — Updated with multi-judge support (num_judges=1 default)
+- `scripts/run_judge_local_amd.py` — Local AMD testing with multi-judge
+- `scripts/run_judge_local.py` — Local vLLM testing with multi-judge
+
+### Math Corpus Prize
+- Discussion post drafted: `docs/math_corpus_discussion.md`
+- Dataset: 1,184 traces with 24 per-sample fields including per-token entropy/logprobs
+- Unique angle: nobody else publishes logprob signals for answer selection research
+
+### Files Created/Modified
+- `docs/math_corpus_discussion.md` — Kaggle discussion post for Math Corpus submission
+- `docs/math_problems.md` — Data quality issues log (leaked answers, suspicious GTs)
+- `submissions/feb8_judge_772/` — New 7-7-2 Kaggle notebook (pushed)
+- `scripts/run_judge_local_amd.py` — Multi-judge, judge-only scoring
+- `scripts/run_judge_local.py` — Same changes for vLLM version

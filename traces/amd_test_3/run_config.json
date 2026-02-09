@@ -1,0 +1,19 @@
+{
+  "problems": "/home/son/GitHub/AIMO/data/curated_union_problems.jsonl",
+  "problem": null,
+  "output": "/home/son/GitHub/AIMO/traces/amd_test_3",
+  "limit": 3,
+  "offset": 0,
+  "timeout": 300,
+  "port": 8081,
+  "workers": 2,
+  "phase1_attempts": 4,
+  "phase2_attempts": 2,
+  "early_stop": 3,
+  "max_turns": 8,
+  "max_tokens": 3072,
+  "context_length": 32768,
+  "temperature": 1.0,
+  "no_think": true,
+  "no_logprobs": false
+}

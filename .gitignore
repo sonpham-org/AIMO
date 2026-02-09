@@ -25,6 +25,9 @@ kaggle_push/*/wheels/
 vllm_wheels/
 vllm_dataset/
 
+# Large trace data (pushed to Kaggle instead)
+trace_gen/traces_h100_curated/traces/
+
 # Data
 data/aime/*.csv
 data/downloads/

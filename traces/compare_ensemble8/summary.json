@@ -1,0 +1,98 @@
+{
+  "timestamp": "2026-02-08T19:58:31.203804",
+  "total_problems": 15,
+  "correct": 10,
+  "accuracy": 0.6666666666666666,
+  "results": [
+    {
+      "index": 1,
+      "answer": 624,
+      "ground_truth": 624,
+      "correct": true
+    },
+    {
+      "index": 2,
+      "answer": 1,
+      "ground_truth": 1,
+      "correct": true
+    },
+    {
+      "index": 3,
+      "answer": 4,
+      "ground_truth": 5,
+      "correct": false
+    },
+    {
+      "index": 4,
+      "answer": 30,
+      "ground_truth": 30,
+      "correct": true
+    },
+    {
+      "index": 5,
+      "answer": 4,
+      "ground_truth": 8,
+      "correct": false
+    },
+    {
+      "index": 6,
+      "answer": 5,
+      "ground_truth": 5,
+      "correct": true
+    },
+    {
+      "index": 7,
+      "answer": 7,
+      "ground_truth": 1,
+      "correct": false
+    },
+    {
+      "index": 8,
+      "answer": 7,
+      "ground_truth": 7,
+      "correct": true
+    },
+    {
+      "index": 9,
+      "answer": 3,
+      "ground_truth": 3,
+      "correct": true
+    },
+    {
+      "index": 10,
+      "answer": 1,
+      "ground_truth": 1,
+      "correct": true
+    },
+    {
+      "index": 11,
+      "answer": 192,
+      "ground_truth": 192,
+      "correct": true
+    },
+    {
+      "index": 12,
+      "answer": 10,
+      "ground_truth": 10,
+      "correct": true
+    },
+    {
+      "index": 13,
+      "answer": 7,
+      "ground_truth": 8,
+      "correct": false
+    },
+    {
+      "index": 14,
+      "answer": 60,
+      "ground_truth": 60,
+      "correct": true
+    },
+    {
+      "index": 15,
+      "answer": 10,
+      "ground_truth": 5,
+      "correct": false
+    }
+  ]
+}

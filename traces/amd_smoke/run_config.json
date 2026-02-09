@@ -1,0 +1,19 @@
+{
+  "problems": null,
+  "problem": "Find the remainder when 2^100 is divided by 7.",
+  "output": "/home/son/GitHub/AIMO/traces/amd_smoke",
+  "limit": 0,
+  "offset": 0,
+  "timeout": 120,
+  "port": 8081,
+  "workers": 2,
+  "phase1_attempts": 3,
+  "phase2_attempts": 0,
+  "early_stop": 2,
+  "max_turns": 8,
+  "max_tokens": 2048,
+  "context_length": 32768,
+  "temperature": 1.0,
+  "no_think": true,
+  "no_logprobs": false
+}

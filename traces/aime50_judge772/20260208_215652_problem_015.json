@@ -1,0 +1,104 @@
+{
+  "problem_index": 15,
+  "problem_text": "The numbers of apples growing on each of six apple trees form an arithmetic sequence where the greatest number of apples growing on any of the six trees is double the least number of apples growing on any of the six trees. The total number of apples growing on all six trees is $990.$ Find the greatest number of apples growing on any of the six trees.",
+  "ground_truth": 220,
+  "timestamp": "2026-02-08T21:55:47.384821",
+  "timeout_seconds": 300,
+  "config": {
+    "model": "Qwen3-8B-Q4_K_M.gguf",
+    "phase1_attempts": 7,
+    "phase2_attempts": 7,
+    "phase1_early_stop": 4,
+    "workers": 2,
+    "temperature": 1.0,
+    "no_think": true
+  },
+  "phases": {
+    "phase1": {
+      "duration_seconds": 65.27,
+      "early_stopped": true,
+      "attempts": [
+        {
+          "Attempt": 2,
+          "Answer": 220,
+          "Entropy": Infinity,
+          "Response Length": 666,
+          "Python Calls": 0,
+          "Python Errors": 0,
+          "turns": [
+            {
+              "type": "text",
+              "content": "We are given that:\n\n- The number of apples on six apple trees form an **arithmetic sequence**.\n- The **greatest** number of apples is **double** the **least** number.\n- The **total number of apples** is **990**.\n- We are to find the **greatest number of apples**.\n\n---\n\n### Step 1: Define the arithmetic sequence\n\nLet the number of apples on the six trees be:\n\n$$\na - 2d,\\ a - d,\\ a,\\ a + d,\\ a + 2d,\\ a + 3d\n$$\n\nThis is a symmetric arithmetic sequence of 6 terms, where:\n\n- The **first term** is $a - 2d$\n- The **last term** is $a + 3d$\n- The **middle term** is $a$\n- The common difference is $d$\n\n---\n\n### Step 2: Use the given information\n\nWe are told that:\n\n1. The **greatest** number is double the **least** number.\n\nSo:\n\n$$\na + 3d = 2(a - 2d)\n$$\n\nLet\u2019s solve this equation for $a$ in terms of $d$:\n\n$$\na + 3d = 2a - 4d \\Rightarrow a = 7d\n$$\n\n---\n\n### Step 3: Total number of apples is 990\n\nThe sum of an arithmetic sequence is given by:\n\n$$\n\\text{Sum} = \\frac{n}{2}(2a + (n - 1)d)\n$$\n\nHere, $n = 6$, and the sequence is:\n\n$$\na - 2d,\\ a - d,\\ a,\\ a + d,\\ a + 2d,\\ a + 3d\n$$\n\nSo, the total number of apples is:\n\n$$\n(a - 2d) + (a - d) + a + (a + d) + (a + 2d) + (a + 3d) = 6a + 3d\n$$\n\nWe are told that the total is 990:\n\n$$\n6a + 3d = 990 \\tag{1}\n$$\n\nBut from earlier, we found:\n\n$$\na = 7d \\tag{2}\n$$\n\nNow substitute (2) into (1):\n\n$$\n6(7d) + 3d = 990 \\Rightarrow 42d + 3d = 990 \\Rightarrow 45d = 990\n$$\n\n$$\nd = \\frac{990}{45} = 22\n$$\n\nNow substitute $d = 22$ into (2):\n\n$$\na = 7d = 7 \\cdot 22 = 154\n$$\n\n---\n\n### Step 4: Find the greatest number of apples\n\nThe greatest number is:\n\n$$\na + 3d = 154 + 3 \\cdot 22 = 154 + 66 = 220\n$$\n\n---\n\n### \u2705 Final Answer:\n$$\n\\boxed{220}\n$$"
+            }
+          ],
+          "Duration": 43.32,
+          "model": "Qwen3-8B-Q4_K_M.gguf",
+          "mode": "tir",
+          "token_budget": 32768,
+          "tokens_remaining": 32102
+        },
+        {
+          "Attempt": 1,
+          "Answer": 220,
+          "Entropy": Infinity,
+          "Response Length": 491,
+          "Python Calls": 0,
+          "Python Errors": 0,
+          "turns": [
+            {
+              "type": "text",
+              "content": "We are given that:\n\n- The number of apples on six apple trees form an **arithmetic sequence**.\n- The **greatest** number of apples is **double** the **least** number.\n- The **total** number of apples on all six trees is **990**.\n- We are to find the **greatest** number of apples.\n\n---\n\n### Step 1: Define variables\n\nLet the number of apples on the six trees form an arithmetic sequence:\n\n$$\na, a+d, a+2d, a+3d, a+4d, a+5d\n$$\n\nWhere:\n- $ a $ is the number of apples on the first tree (least number),\n- $ d $ is the common difference.\n\nThe **greatest** number is $ a+5d $, and it is double the **least** number:\n$$\na + 5d = 2a \\Rightarrow 5d = a\n$$\n\n---\n\n### Step 2: Total number of apples\n\nSum of an arithmetic sequence:\n$$\n\\text{Sum} = \\frac{n}{2}(2a + (n-1)d)\n$$\n\nHere, $ n = 6 $, so:\n$$\n\\text{Sum} = \\frac{6}{2}(2a + 5d) = 3(2a + 5d) = 990\n$$\n\n$$\n2a + 5d = 330\n$$\n\nBut we also know:\n$$\na = 5d\n$$\n\nSo, substitute $ a = 5d $ into the equation:\n$$\n2(5d) + 5d = 330 \\Rightarrow 10d + 5d = 330 \\Rightarrow 15d = 330\n$$\n\n$$\nd = \\frac{330}{15} = 22\n$$\n\nNow, compute $ a = 5d = 5 \\times 22 = 110 $\n\n---\n\n### Step 3: Greatest number of apples\n\n$$\na + 5d = 110 + 5 \\times 22 = 110 + 110 = 220\n$$\n\n---\n\n### Final Answer:\n\n$$\n\\boxed{220}\n$$"
+            }
+          ],
+          "Duration": 53.4,
+          "model": "Qwen3-8B-Q4_K_M.gguf",
+          "mode": "tir",
+          "token_budget": 32768,
+          "tokens_remaining": 32277
+        },
+        {
+          "Attempt": 3,
+          "Answer": 220,
+          "Entropy": Infinity,
+          "Response Length": 539,
+          "Python Calls": 0,
+          "Python Errors": 0,
+          "turns": [
+            {
+              "type": "text",
+              "content": "We are given that the number of apples on six apple trees form an **arithmetic sequence**, and the **greatest number of apples is double the least number**. Also, the **total number of apples is 990**.\n\n---\n\n### Step 1: Understand the problem using arithmetic sequences\n\nLet\u2019s denote the terms of the arithmetic sequence as:\n\n$$\na, a + d, a + 2d, a + 3d, a + 4d, a + 5d\n$$\n\nHere:\n- $ a $ is the **least number of apples**,\n- $ d $ is the **common difference**,\n- The **greatest number** is $ a + 5d $,\n- The **total number** of apples is:\n  $$\n  S = a + (a + d) + (a + 2d) + (a + 3d) + (a + 4d) + (a + 5d)\n  $$\n\nLet\u2019s compute that sum:\n\n$$\nS = 6a + (0 + 1 + 2 + 3 + 4 + 5)d = 6a + 15d\n$$\n\nWe are told this total is 990:\n\n$$\n6a + 15d = 990 \\tag{1}\n$$\n\nAlso, we are told that the **greatest number is double the least number**:\n\n$$\na + 5d = 2a \\tag{2}\n$$\n\n---\n\n### Step 2: Solve the system of equations\n\nFrom equation (2):\n$$\na + 5d = 2a \\Rightarrow 5d = a \\Rightarrow a = 5d\n$$\n\nSubstitute $ a = 5d $ into equation (1):\n\n$$\n6(5d) + 15d = 990 \\Rightarrow 30d + 15d = 990 \\Rightarrow 45d = 990\n\\Rightarrow d = \\frac{990}{45} = 22\n$$\n\nNow, find $ a $:\n\n$$\na = 5d = 5 \\times 22 = 110\n$$\n\nNow, find the **greatest number of apples**:\n\n$$\na + 5d = 110 + 5 \\times 22 = 110 + 110 = 220\n$$\n\n---\n\n### Final Answer:\n\n$$\n\\boxed{220}\n$$"
+            }
+          ],
+          "Duration": 16.74,
+          "model": "Qwen3-8B-Q4_K_M.gguf",
+          "mode": "tir",
+          "token_budget": 32768,
+          "tokens_remaining": 32229
+        },
+        {
+          "Attempt": 4,
+          "Answer": 220,
+          "Entropy": Infinity,
+          "Response Length": 412,
+          "Python Calls": 0,
+          "Python Errors": 0,
+          "turns": [
+            {
+              "type": "text",
+              "content": "Let's denote the six terms of the arithmetic sequence as:\n$$\na, a + d, a + 2d, a + 3d, a + 4d, a + 5d\n$$\nWhere:\n- $ a $ is the least number of apples on any tree (the first term),\n- $ d $ is the common difference,\n- The greatest number of apples is $ a + 5d $,\n- The problem says the greatest is **double** the least, so:\n$$\na + 5d = 2a \\Rightarrow 5d = a\n$$\nAlso, the total number of apples is given as:\n$$\na + (a + d) + (a + 2d) + (a + 3d) + (a + 4d) + (a + 5d) = 990\n$$\nSimplify this sum:\n$$\n6a + (0 + 1 + 2 + 3 + 4 + 5)d = 990\n\\Rightarrow 6a + 15d = 990\n$$\n\nNow, use the earlier relation: $ a = 5d $\n\nSubstitute into the equation:\n$$\n6(5d) + 15d = 990 \\Rightarrow 30d + 15d = 990 \\Rightarrow 45d = 990\n\\Rightarrow d = \\frac{990}{45} = 22\n$$\n\nNow find $ a $:\n$$\na = 5d = 5 \\cdot 22 = 110\n$$\n\nThe greatest number of apples is:\n$$\na + 5d = 110 + 5 \\cdot 22 = 110 + 110 = 220\n$$\n\n### Final Answer:\n$$\n\\boxed{220}\n$$"
+            }
+          ],
+          "Duration": 11.52,
+          "model": "Qwen3-8B-Q4_K_M.gguf",
+          "mode": "tir",
+          "token_budget": 32768,
+          "tokens_remaining": 32356
+        }
+      ]
+    }
+  },
+  "final_answer": 220,
+  "selection_method": "early_stop",
+  "total_seconds": 65.27,
+  "is_correct": true
+}

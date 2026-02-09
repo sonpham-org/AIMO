@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-02-08T18:29:42.315526",
+  "total_problems": 3,
+  "correct": 1,
+  "accuracy": 0.3333333333333333,
+  "results": [
+    {
+      "index": 1,
+      "answer": 0,
+      "ground_truth": 20,
+      "correct": false
+    },
+    {
+      "index": 2,
+      "answer": 12,
+      "ground_truth": 12,
+      "correct": true
+    },
+    {
+      "index": 3,
+      "answer": 0
+    }
+  ]
+}

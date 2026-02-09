@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-02-08T19:20:36.259453",
+  "total_problems": 5,
+  "correct": 3,
+  "accuracy": 0.6,
+  "results": [
+    {
+      "index": 1,
+      "answer": 12,
+      "ground_truth": 12,
+      "correct": true
+    },
+    {
+      "index": 2,
+      "answer": 25,
+      "ground_truth": 25,
+      "correct": true
+    },
+    {
+      "index": 3,
+      "answer": 9,
+      "ground_truth": 7,
+      "correct": false
+    },
+    {
+      "index": 4,
+      "answer": 90,
+      "ground_truth": 90,
+      "correct": true
+    },
+    {
+      "index": 5,
+      "answer": 70,
+      "ground_truth": 91,
+      "correct": false
+    }
+  ]
+}

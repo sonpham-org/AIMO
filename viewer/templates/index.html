@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIMO Trace Viewer</title>
+
+  <!-- MathJax for LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+      },
+      startup: {
+        ready: () => {
+          MathJax.startup.defaultReady();
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+  <!-- Highlight.js for code syntax highlighting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/styles/github-dark.min.css">
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/languages/python.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-tertiary: #21262d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+      --think-bg: #1c1e2e;
+      --think-border: #444d6e;
+      --code-bg: #0d1117;
+      --output-bg: #0a1628;
+      --output-border: #1f4068;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Top bar ---- */
+    .topbar {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+      z-index: 100;
+    }
+    .topbar h1 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+    .topbar select, .topbar input {
+      background: var(--bg-tertiary);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 13px;
+      outline: none;
+    }
+    .topbar select:focus, .topbar input:focus {
+      border-color: var(--accent);
+    }
+    .topbar label {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .source-info {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    /* ---- Main layout ---- */
+    .main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ---- Sidebar: problem list ---- */
+    .sidebar {
+      width: 280px;
+      min-width: 280px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .sidebar-header {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .problem-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+    .problem-item {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .problem-item:hover { background: var(--bg-tertiary); }
+    .problem-item.active { background: var(--bg-tertiary); border-left: 3px solid var(--accent); }
+    .problem-item .pid {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .problem-item .preview {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .problem-item .gt {
+      font-size: 11px;
+      color: var(--green);
+      margin-top: 2px;
+    }
+
+    /* ---- Content area ---- */
+    .content {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ---- Left panel: problem ---- */
+    .panel-problem {
+      width: 38%;
+      min-width: 300px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .panel-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .problem-text {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text);
+    }
+    .problem-meta {
+      margin-top: 20px;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .problem-meta .meta-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      font-size: 13px;
+    }
+    .meta-label { color: var(--text-muted); }
+    .meta-value { font-weight: 600; }
+    .meta-value.correct { color: var(--green); }
+    .meta-value.incorrect { color: var(--red); }
+
+    /* ---- Right panel: trace ---- */
+    .panel-trace {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Attempt tabs */
+    .attempt-bar {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .attempt-bar label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-right: 4px;
+    }
+    .attempt-tab {
+      padding: 4px 12px;
+      border-radius: 14px;
+      font-size: 12px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg-tertiary);
+      color: var(--text-muted);
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .attempt-tab:hover { border-color: var(--accent); color: var(--text); }
+    .attempt-tab.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .attempt-tab.correct-answer {
+      border-color: var(--green);
+    }
+    .attempt-tab.correct-answer.active {
+      background: var(--green);
+    }
+    .attempt-tab.wrong-answer {
+      border-color: var(--red);
+    }
+    .attempt-tab.wrong-answer.active {
+      background: var(--red);
+    }
+
+    .attempt-meta {
+      display: flex;
+      gap: 16px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .attempt-meta .chip {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 10px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .attempt-meta .chip b { color: var(--text); }
+
+    /* Trace content */
+    .trace-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    /* Turn blocks */
+    .turn-block {
+      margin-bottom: 16px;
+    }
+    .turn-block.thinking {
+      background: var(--think-bg);
+      border: 1px solid var(--think-border);
+      border-radius: 8px;
+      padding: 14px;
+      position: relative;
+    }
+    .turn-block.thinking::before {
+      content: 'Thinking';
+      position: absolute;
+      top: -9px;
+      left: 12px;
+      background: var(--think-bg);
+      padding: 0 6px;
+      font-size: 11px;
+      color: var(--purple);
+      font-weight: 600;
+    }
+    .turn-block.thinking .turn-content {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #a0a8c0;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .turn-block.thinking.expanded .turn-content {
+      max-height: none;
+    }
+    .think-toggle {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--purple);
+      cursor: pointer;
+      user-select: none;
+    }
+    .think-toggle:hover { text-decoration: underline; }
+
+    .turn-block.text-turn .turn-content {
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    /* ---- Section groups ---- */
+    .trace-section {
+      margin-bottom: 20px;
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-label.model-label { color: var(--accent); }
+    .section-label.tool-label { color: var(--orange); }
+
+    .section-body {
+      padding-left: 0;
+    }
+
+    /* Tool call group */
+    .tool-call-group {
+      border-left: 3px solid var(--orange);
+      padding-left: 14px;
+      margin: 12px 0;
+    }
+    .tool-call-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--orange);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .tool-call-header .tool-icon {
+      width: 16px; height: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .turn-block.code-turn {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .code-header {
+      display: flex;
+      align-items: center;
+      padding: 6px 12px;
+      background: var(--bg-tertiary);
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .code-header .lang-badge {
+      background: var(--accent);
+      color: #fff;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+    .code-block {
+      padding: 12px;
+      overflow-x: auto;
+    }
+    .code-block pre {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .code-block code {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    }
+
+    .turn-block.output-turn {
+      background: var(--output-bg);
+      border: 1px solid var(--output-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .output-header {
+      display: flex;
+      align-items: center;
+      padding: 6px 12px;
+      background: rgba(31, 64, 104, 0.4);
+      border-bottom: 1px solid var(--output-border);
+      font-size: 11px;
+    }
+    .output-header .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+    .output-header .status-dot.success { background: var(--green); }
+    .output-header .status-dot.error { background: var(--red); }
+    .output-content {
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .output-content.error { color: var(--red); }
+
+    /* Vote distribution */
+    .vote-dist {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .vote-dist h4 {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .vote-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      font-size: 12px;
+    }
+    .vote-answer { width: 60px; text-align: right; font-weight: 600; }
+    .vote-bar-wrap {
+      flex: 1;
+      height: 16px;
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .vote-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+    .vote-bar-fill.correct { background: var(--green); }
+    .vote-count { width: 30px; color: var(--text-muted); }
+
+    /* Empty state */
+    .empty-state {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-muted);
+      font-size: 14px;
+      text-align: center;
+      padding: 40px;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* Responsive resize handle */
+    .resize-handle {
+      width: 4px;
+      cursor: col-resize;
+      background: transparent;
+      transition: background 0.2s;
+    }
+    .resize-handle:hover { background: var(--accent); }
+
+    /* MathJax overrides for dark mode */
+    mjx-container { color: var(--text) !important; }
+
+    /* boxed answer highlight */
+    .boxed-answer {
+      display: inline-block;
+      border: 2px solid var(--green);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin: 4px 0;
+      font-weight: 600;
+    }
+
+    /* Align equations */
+    .problem-text p { margin-bottom: 12px; }
+
+    .filter-bar {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .filter-bar input {
+      width: 100%;
+      background: var(--bg-tertiary);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12px;
+      outline: none;
+    }
+    .filter-bar input:focus { border-color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <h1>AIMO Trace Viewer</h1>
+  <label>Source:</label>
+  <select id="source-select">
+    <option value="">-- select trace source --</option>
+    {% for s in sources %}
+    <option value="{{ s.path }}" data-model="{{ s.model }}" data-count="{{ s.n_problems }}">
+      {{ s.name }} ({{ s.model }}, {{ s.n_problems }} problems)
+    </option>
+    {% endfor %}
+  </select>
+  <span class="source-info" id="source-info"></span>
+</div>
+
+<!-- Main layout -->
+<div class="main">
+  <!-- Sidebar: problem list -->
+  <div class="sidebar">
+    <div class="sidebar-header">Problems</div>
+    <div class="filter-bar">
+      <input type="text" id="problem-filter" placeholder="Filter problems...">
+    </div>
+    <div class="problem-list" id="problem-list">
+      <div class="empty-state">Select a trace source above</div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Left: problem -->
+    <div class="panel-problem">
+      <div class="panel-header">Problem</div>
+      <div class="panel-body" id="problem-panel">
+        <div class="empty-state">Select a problem from the sidebar</div>
+      </div>
+    </div>
+
+    <div class="resize-handle" id="resize-handle"></div>
+
+    <!-- Right: trace -->
+    <div class="panel-trace">
+      <div class="attempt-bar" id="attempt-bar" style="display:none">
+        <label>Attempt:</label>
+        <div id="attempt-tabs"></div>
+        <div class="attempt-meta" id="attempt-meta"></div>
+      </div>
+      <div class="trace-body" id="trace-panel">
+        <div class="empty-state">Select a problem to view its traces</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---- State ----
+let currentSource = null;
+let currentProblems = [];
+let currentTrace = null;
+let currentAttemptIdx = 0;
+
+// ---- DOM refs ----
+const sourceSelect = document.getElementById('source-select');
+const sourceInfo = document.getElementById('source-info');
+const problemList = document.getElementById('problem-list');
+const problemFilter = document.getElementById('problem-filter');
+const problemPanel = document.getElementById('problem-panel');
+const attemptBar = document.getElementById('attempt-bar');
+const attemptTabs = document.getElementById('attempt-tabs');
+const attemptMeta = document.getElementById('attempt-meta');
+const tracePanel = document.getElementById('trace-panel');
+
+// ---- Source selection ----
+sourceSelect.addEventListener('change', async () => {
+  const path = sourceSelect.value;
+  if (!path) return;
+  currentSource = path;
+  sourceInfo.textContent = 'Loading...';
+
+  const res = await fetch(`/api/problems?source=${encodeURIComponent(path)}`);
+  currentProblems = await res.json();
+  renderProblemList(currentProblems);
+
+  const opt = sourceSelect.selectedOptions[0];
+  sourceInfo.textContent = `${opt.dataset.model} | ${opt.dataset.count} problems`;
+});
+
+// ---- Problem list ----
+function renderProblemList(problems) {
+  problemList.innerHTML = '';
+  if (!problems.length) {
+    problemList.innerHTML = '<div class="empty-state">No problems found</div>';
+    return;
+  }
+  problems.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'problem-item';
+    div.dataset.index = i;
+    div.innerHTML = `
+      <div class="pid">#${p.id}</div>
+      <div class="preview">${escapeHtml(p.text_preview)}</div>
+      ${p.ground_truth !== null ? `<div class="gt">Answer: ${p.ground_truth}</div>` : ''}
+    `;
+    div.addEventListener('click', () => selectProblem(i));
+    problemList.appendChild(div);
+  });
+}
+
+// Filter
+problemFilter.addEventListener('input', () => {
+  const q = problemFilter.value.toLowerCase();
+  const items = problemList.querySelectorAll('.problem-item');
+  items.forEach(item => {
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(q) ? '' : 'none';
+  });
+});
+
+// ---- Select problem ----
+async function selectProblem(index) {
+  // Update sidebar active
+  problemList.querySelectorAll('.problem-item').forEach((el, i) => {
+    el.classList.toggle('active', i === index);
+  });
+
+  const p = currentProblems[index];
+  problemPanel.innerHTML = '<div class="empty-state">Loading...</div>';
+  tracePanel.innerHTML = '<div class="empty-state">Loading trace...</div>';
+
+  const res = await fetch(`/api/trace?source=${encodeURIComponent(currentSource)}&file=${encodeURIComponent(p.file)}`);
+  currentTrace = await res.json();
+  currentAttemptIdx = 0;
+
+  renderProblemPanel();
+  renderAttemptBar();
+  renderTrace();
+}
+
+// ---- Render problem panel ----
+function renderProblemPanel() {
+  const t = currentTrace;
+  let html = `<div class="problem-text">${formatMathText(t.problem_text)}</div>`;
+
+  // Meta
+  html += `<div class="problem-meta">`;
+  if (t.ground_truth !== null && t.ground_truth !== undefined) {
+    html += `<div class="meta-row"><span class="meta-label">Ground Truth</span><span class="meta-value correct">${t.ground_truth}</span></div>`;
+  }
+  if (t.final_answer !== null && t.final_answer !== undefined) {
+    const isCorrect = t.ground_truth !== null && String(t.final_answer) === String(t.ground_truth);
+    html += `<div class="meta-row"><span class="meta-label">Selected Answer</span><span class="meta-value ${isCorrect ? 'correct' : 'incorrect'}">${t.final_answer}</span></div>`;
+  }
+  if (t.selection_method) {
+    html += `<div class="meta-row"><span class="meta-label">Selection Method</span><span class="meta-value">${t.selection_method}</span></div>`;
+  }
+  if (t.wall_time) {
+    html += `<div class="meta-row"><span class="meta-label">Total Time</span><span class="meta-value">${t.wall_time.toFixed(1)}s</span></div>`;
+  }
+  html += `<div class="meta-row"><span class="meta-label">Attempts</span><span class="meta-value">${t.attempts.length}</span></div>`;
+  html += `</div>`;
+
+  // Vote distribution
+  if (t.vote_distribution) {
+    html += renderVoteDistribution(t.vote_distribution, t.ground_truth);
+  }
+
+  problemPanel.innerHTML = html;
+  typeset(problemPanel);
+}
+
+function renderVoteDistribution(votes, gt) {
+  const entries = Object.entries(votes).sort((a, b) => b[1] - a[1]);
+  const maxVotes = Math.max(...entries.map(e => e[1]));
+  let html = `<div class="vote-dist"><h4>Vote Distribution</h4>`;
+  entries.forEach(([answer, count]) => {
+    const pct = (count / maxVotes * 100).toFixed(0);
+    const isCorrect = gt !== null && String(answer) === String(gt);
+    html += `
+      <div class="vote-bar-row">
+        <span class="vote-answer">${answer}</span>
+        <div class="vote-bar-wrap">
+          <div class="vote-bar-fill ${isCorrect ? 'correct' : ''}" style="width: ${pct}%"></div>
+        </div>
+        <span class="vote-count">${count}</span>
+      </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+// ---- Attempt bar ----
+function renderAttemptBar() {
+  const attempts = currentTrace.attempts;
+  if (!attempts.length) {
+    attemptBar.style.display = 'none';
+    return;
+  }
+  attemptBar.style.display = 'flex';
+  attemptTabs.innerHTML = '';
+
+  attempts.forEach((att, i) => {
+    const tab = document.createElement('span');
+    tab.className = 'attempt-tab';
+    if (i === currentAttemptIdx) tab.classList.add('active');
+
+    // Color code by correctness
+    const gt = currentTrace.ground_truth;
+    if (gt !== null && gt !== undefined && att.answer !== null && att.answer !== undefined) {
+      if (String(att.answer) === String(gt)) {
+        tab.classList.add('correct-answer');
+      } else {
+        tab.classList.add('wrong-answer');
+      }
+    }
+
+    tab.textContent = `#${att.index}`;
+    if (att.answer !== null && att.answer !== undefined) {
+      tab.textContent += ` (${att.answer})`;
+    }
+    tab.addEventListener('click', () => {
+      currentAttemptIdx = i;
+      renderAttemptBar();
+      renderTrace();
+    });
+    attemptTabs.appendChild(tab);
+  });
+
+  // Meta chips
+  const att = attempts[currentAttemptIdx];
+  let metaHtml = '';
+  if (att.model) metaHtml += `<span class="chip"><b>${att.model}</b></span>`;
+  if (att.entropy !== null && att.entropy !== undefined && isFinite(att.entropy)) {
+    metaHtml += `<span class="chip">H: <b>${att.entropy.toFixed(3)}</b></span>`;
+  }
+  if (att.duration) metaHtml += `<span class="chip"><b>${att.duration.toFixed(1)}s</b></span>`;
+  if (att.python_calls > 0) metaHtml += `<span class="chip">Code: <b>${att.python_calls}</b></span>`;
+  if (att.mode) metaHtml += `<span class="chip">${att.mode}</span>`;
+  attemptMeta.innerHTML = metaHtml;
+}
+
+// ---- Render trace ----
+function renderTrace() {
+  const att = currentTrace.attempts[currentAttemptIdx];
+  if (!att) {
+    tracePanel.innerHTML = '<div class="empty-state">No attempt data</div>';
+    return;
+  }
+
+  const turns = att.turns || [];
+  if (!turns.length) {
+    tracePanel.innerHTML = '<div class="empty-state">No turn data available</div>';
+    return;
+  }
+
+  // Group turns into sections: model reasoning vs tool calls
+  const sections = groupTurnsIntoSections(turns);
+  let html = '';
+  let thinkIdx = 0;
+  let toolCallNum = 0;
+
+  sections.forEach(section => {
+    if (section.type === 'model') {
+      html += `<div class="trace-section">`;
+      html += `<div class="section-label model-label">Model Response</div>`;
+      html += `<div class="section-body">`;
+      section.turns.forEach(turn => {
+        if (turn.type === 'thinking') {
+          html += renderThinkingBlock(turn.content, thinkIdx++);
+        } else {
+          html += renderTextBlock(turn.content);
+        }
+      });
+      html += `</div></div>`;
+    } else if (section.type === 'tool') {
+      toolCallNum++;
+      html += `<div class="trace-section">`;
+      html += `<div class="section-label tool-label">Tool Call #${toolCallNum}</div>`;
+      html += `<div class="tool-call-group">`;
+      section.turns.forEach(turn => {
+        if (turn.type === 'code') {
+          html += renderCodeBlock(turn.content);
+        } else if (turn.type === 'code_output') {
+          html += renderOutputBlock(turn.content, turn.success !== false);
+        }
+      });
+      html += `</div></div>`;
+    }
+  });
+
+  tracePanel.innerHTML = html;
+  typeset(tracePanel);
+
+  // Highlight code blocks
+  tracePanel.querySelectorAll('pre code.language-python').forEach(el => {
+    hljs.highlightElement(el);
+  });
+}
+
+function groupTurnsIntoSections(turns) {
+  const sections = [];
+  let currentSection = null;
+
+  turns.forEach(turn => {
+    const isToolTurn = (turn.type === 'code' || turn.type === 'code_output');
+    const sectionType = isToolTurn ? 'tool' : 'model';
+
+    if (!currentSection || currentSection.type !== sectionType) {
+      currentSection = { type: sectionType, turns: [] };
+      sections.push(currentSection);
+    }
+    currentSection.turns.push(turn);
+  });
+
+  return sections;
+}
+
+function renderThinkingBlock(content, idx) {
+  const lines = content.split('\n');
+  const isLong = lines.length > 20 || content.length > 1000;
+  return `
+    <div class="turn-block thinking" id="think-${idx}">
+      <div class="turn-content">${formatMathText(content)}</div>
+      ${isLong ? `<span class="think-toggle" onclick="toggleThink(${idx})">Show more</span>` : ''}
+    </div>`;
+}
+
+function renderCodeBlock(content) {
+  return `
+    <div class="turn-block code-turn">
+      <div class="code-header">
+        <span class="lang-badge">Python</span>
+        <span>Code Execution</span>
+      </div>
+      <div class="code-block">
+        <pre><code class="language-python">${escapeHtml(content)}</code></pre>
+      </div>
+    </div>`;
+}
+
+function renderOutputBlock(content, success) {
+  return `
+    <div class="turn-block output-turn">
+      <div class="output-header">
+        <span class="status-dot ${success ? 'success' : 'error'}"></span>
+        <span>${success ? 'Output' : 'Error'}</span>
+      </div>
+      <div class="output-content ${success ? '' : 'error'}">${escapeHtml(content)}</div>
+    </div>`;
+}
+
+function renderTextBlock(content) {
+  return `
+    <div class="turn-block text-turn">
+      <div class="turn-content">${formatMathText(content)}</div>
+    </div>`;
+}
+
+// ---- Helpers ----
+
+function toggleThink(idx) {
+  const block = document.getElementById(`think-${idx}`);
+  block.classList.toggle('expanded');
+  const toggle = block.querySelector('.think-toggle');
+  toggle.textContent = block.classList.contains('expanded') ? 'Show less' : 'Show more';
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function formatMathText(text) {
+  if (!text) return '';
+  // Escape HTML but preserve LaTeX delimiters
+  let html = text;
+
+  // Convert \boxed{...} to highlighted spans (handle nested braces)
+  html = html.replace(/\\boxed\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g,
+    '<span class="boxed-answer">\\boxed{$1}</span>');
+
+  // Convert newlines to <br> but not inside math
+  // Split by display math blocks to avoid breaking them
+  const segments = [];
+  let rest = html;
+  // Handle $$ ... $$ display math
+  const dispPattern = /(\$\$[\s\S]*?\$\$)/g;
+  let match;
+  let lastIdx = 0;
+  while ((match = dispPattern.exec(html)) !== null) {
+    const before = html.slice(lastIdx, match.index);
+    segments.push({ text: before, isMath: false });
+    segments.push({ text: match[1], isMath: true });
+    lastIdx = match.index + match[0].length;
+  }
+  segments.push({ text: html.slice(lastIdx), isMath: false });
+
+  html = segments.map(s => {
+    if (s.isMath) return s.text;
+    // For non-math segments, convert double newlines to paragraphs
+    return s.text
+      .replace(/\n\n+/g, '</p><p>')
+      .replace(/\n/g, '<br>');
+  }).join('');
+
+  // Wrap in paragraph
+  if (!html.startsWith('<p>')) html = '<p>' + html + '</p>';
+
+  return html;
+}
+
+function typeset(el) {
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([el]).catch(err => console.warn('MathJax error:', err));
+  }
+}
+
+// ---- Resize handle ----
+const resizeHandle = document.getElementById('resize-handle');
+const panelProblem = document.querySelector('.panel-problem');
+let isResizing = false;
+
+resizeHandle.addEventListener('mousedown', (e) => {
+  isResizing = true;
+  document.body.style.cursor = 'col-resize';
+  document.body.style.userSelect = 'none';
+  e.preventDefault();
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (!isResizing) return;
+  const content = document.querySelector('.content');
+  const rect = content.getBoundingClientRect();
+  const newWidth = e.clientX - rect.left;
+  const pct = (newWidth / rect.width * 100).toFixed(1);
+  if (pct > 20 && pct < 70) {
+    panelProblem.style.width = pct + '%';
+  }
+});
+
+document.addEventListener('mouseup', () => {
+  isResizing = false;
+  document.body.style.cursor = '';
+  document.body.style.userSelect = '';
+});
+
+// ---- Keyboard navigation ----
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT') return;
+
+  if (e.key === 'ArrowLeft' && currentTrace) {
+    // Previous attempt
+    if (currentAttemptIdx > 0) {
+      currentAttemptIdx--;
+      renderAttemptBar();
+      renderTrace();
+    }
+  } else if (e.key === 'ArrowRight' && currentTrace) {
+    // Next attempt
+    if (currentAttemptIdx < currentTrace.attempts.length - 1) {
+      currentAttemptIdx++;
+      renderAttemptBar();
+      renderTrace();
+    }
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+{
+  "problem_index": 4,
+  "problem_text": "Mason, Noah, and Jacob want to have an eating contest but can't agree on what food to eat. Mason wants hot dogs, Noah insists on burgers, Jacob thinks they should eat pies, and they all take into consideration eating pizzas and sandwiches as well. They finally agree that everyone can eat whatever they want, and they'll use the weight of the food to determine who wins. A hot dog weighs 2 ounces, a burger weighs 5 ounces, a pie weighs 10 ounces, a pizza weighs 15 ounces, and a sandwich weighs 3 ounces.\n\nJacob eats three fewer pies than Noah eats burgers, and he eats half the number of pizzas as sandwiches. Mason eats 3 times as many hotdogs as the number of pies consumed by Jacob. Additionally, Mason eats 1.5 times more hotdogs than sandwiches.\n\nIf Noah ate 8 burgers, what is the total weight of the hotdogs that Mason ate?",
+  "ground_truth": 30,
+  "timestamp": "2026-02-08T20:22:28.910303",
+  "timeout_seconds": 300,
+  "config": {
+    "model": "Qwen3-8B-Q4_K_M.gguf",
+    "phase1_attempts": 7,
+    "phase2_attempts": 7,
+    "phase1_early_stop": 4,
+    "workers": 2,
+    "temperature": 1.0,
+    "no_think": true
+  },
+  "phases": {
+    "phase1": {
+      "duration_seconds": 34.7,
+      "early_stopped": true,
+      "attempts": [
+        {
+          "Attempt": 2,
+          "Answer": 30,
+          "Entropy": Infinity,
+          "Response Length": 458,
+          "Python Calls": 0,
+          "Python Errors": 0,
+          "turns": [
+            {
+              "type": "text",
+              "content": "We are given the following:\n\n- Hot dog = 2 ounces\n- Burger = 5 ounces\n- Pie = 10 ounces\n- Pizza = 15 ounces\n- Sandwich = 3 ounces\n\n### Step 1: Understand the relationships\n\nWe are told:\n\n- **Noah ate 8 burgers**\n- **Jacob eats three fewer pies than Noah eats burgers**\n- **Jacob eats half the number of pizzas as sandwiches**\n- **Mason eats 3 times as many hotdogs as the number of pies consumed by Jacob**\n- **Mason eats 1.5 times more hotdogs than sandwiches**\n\nWe are to find the **total weight of the hotdogs that Mason ate**.\n\n---\n\n### Step 2: Express the variables\n\nLet:\n- $ N_b = 8 $ (Noah's burgers)\n- $ J_p = $ number of pies Jacob ate\n- $ J_s = $ number of sandwiches Jacob ate\n- $ J_{pi} = $ number of pizzas Jacob ate\n- $ M_h = $ number of hotdogs Mason ate\n- $ M_s = $ number of sandwiches Mason ate\n\nWe are given the following relationships:\n\n1. $ J_p = N_b - 3 = 8 - 3 = 5 $\n2. $ J_{pi} = \\frac{1}{2} J_s $\n3. $ M_h = 3 \\times J_p $\n4. $ M_h = 1.5 \\times M_s $\n\nLet\u2019s find $ M_h $ using the first relation and substitute into the second to verify.\n\n---\n\n### Step 3: Compute Jacob's pies and Mason's hotdogs\n\nFrom (1):\n$$\nJ_p = 5\n$$\n\nFrom (3):\n$$\nM_h = 3 \\times J_p = 3 \\times 5 = 15\n$$\n\n---\n\n### Step 4: Find the weight of hotdogs Mason ate\n\nEach hotdog weighs 2 ounces:\n$$\n\\text{Weight of hotdogs} = M_h \\times 2 = 15 \\times 2 = 30 \\text{ ounces}\n$$\n\n---\n\n### Final Answer:\n\n$$\n\\boxed{30}\n$$"
+            }
+          ],
+          "Duration": 13.78,
+          "model": "Qwen3-8B-Q4_K_M.gguf",
+          "mode": "tir",
+          "token_budget": 32768,
+          "tokens_remaining": 32310
+        },
+        {
+          "Attempt": 1,
+          "Answer": 30,
+          "Entropy": Infinity,
+          "Response Length": 493,
+          "Python Calls": 0,
+          "Python Errors": 0,
+          "turns": [
+            {
+              "type": "text",
+              "content": "We are given:\n\n- A hot dog weighs **2 ounces**.\n- A burger weighs **5 ounces**.\n- A pie weighs **10 ounces**.\n- A pizza weighs **15 ounces**.\n- A sandwich weighs **3 ounces**.\n\nWe are told:\n\n- Jacob eats **three fewer pies than Noah eats burgers**, and he eats **half the number of pizzas as sandwiches**.\n- Mason eats **3 times as many hotdogs as the number of pies consumed by Jacob**.\n- Mason eats **1.5 times more hotdogs than sandwiches**.\n- Noah ate **8 burgers**.\n\nOur goal is to find the **total weight of the hotdogs that Mason ate**.\n\n---\n\n### Step 1: Assign variables and set up equations\n\nLet's define the variables:\n\n- Let $ B $ be the number of burgers Noah ate.\n- Let $ P $ be the number of pies Jacob ate.\n- Let $ S $ be the number of sandwiches Jacob ate.\n- Let $ Pi $ be the number of pizzas Jacob ate.\n- Let $ H $ be the number of hotdogs Mason ate.\n- Let $ Sa $ be the number of sandwiches Mason ate.\n\nWe are given:\n\n- Noah ate $ B = 8 $ burgers.\n- Jacob eats **three fewer pies than Noah eats burgers**:  \n  $$ P = B - 3 = 8 - 3 = 5 $$\n- Jacob eats **half the number of pizzas as sandwiches**:  \n  $$ Pi = \\frac{1}{2}S $$\n- Mason eats **3 times as many hotdogs as the number of pies consumed by Jacob**:  \n  $$ H = 3P = 3 \\times 5 = 15 $$\n- Mason eats **1.5 times more hotdogs than sandwiches**:  \n  $$ H = 1.5Sa \\Rightarrow Sa = \\frac{H}{1.5} $$\n\nNow compute $ Sa $:\n\n$$ Sa = \\frac{15}{1.5} = 10 $$\n\n---\n\n### Step 2: Compute the total weight of the hotdogs that Mason ate\n\nHot dogs weigh **2 ounces each**, and Mason ate **15 hotdogs**:\n\n$$ \\text{Total weight of hotdogs} = 15 \\times 2 = 30 $$\n\n---\n\n### \u2705 Final Answer:\n\n$$\n\\boxed{30}\n$$"
+            }
+          ],
+          "Duration": 14.81,
+          "model": "Qwen3-8B-Q4_K_M.gguf",
+          "mode": "tir",
+          "token_budget": 32768,
+          "tokens_remaining": 32275
+        },
+        {
+          "Attempt": 3,
+          "Answer": 30,
+          "Entropy": Infinity,
+          "Response Length": 334,
+          "Python Calls": 0,
+          "Python Errors": 0,
+          "turns": [
+            {
+              "type": "text",
+              "content": "We are given the following:\n\n- A **hot dog** weighs **2 ounces**.\n- A **burger** weighs **5 ounces**.\n- A **pie** weighs **10 ounces**.\n- A **pizza** weighs **15 ounces**.\n- A **sandwich** weighs **3 ounces**.\n\nWe are told:\n- **Noah ate 8 burgers**.\n- **Jacob eats three fewer pies than Noah eats burgers**, so Jacob ate:\n  $$\n  8 - 3 = 5 \\text{ pies}\n  $$\n- Jacob eats **half the number of pizzas as sandwiches**.\n- Mason eats **3 times as many hotdogs as the number of pies consumed by Jacob**.\n- Mason also eats **1.5 times more hotdogs than sandwiches**.\n- We are to compute the **total weight of the hotdogs that Mason ate**.\n\n---\n\n### Step 1: Determine the number of pies Jacob ate\n$$\n\\text{Jacob eats } 8 - 3 = 5 \\text{ pies}\n$$\n\n---\n\n### Step 2: Find how many hotdogs Mason ate\nWe are told:\n\n> Mason eats 3 times as many hotdogs as the number of pies consumed by Jacob.\n\n$$\n\\text{Hotdogs eaten by Mason} = 3 \\times 5 = 15\n$$\n\n---\n\n### Step 3: Total weight of the hotdogs Mason ate\n$$\n\\text{Weight} = 15 \\times 2 = \\boxed{30}\n$$\n\n---\n\n### Final Answer:\n$$\n\\boxed{30}\n$$"
+            }
+          ],
+          "Duration": 9.63,
+          "model": "Qwen3-8B-Q4_K_M.gguf",
+          "mode": "tir",
+          "token_budget": 32768,
+          "tokens_remaining": 32434
+        },
+        {
+          "Attempt": 4,
+          "Answer": 30,
+          "Entropy": Infinity,
+          "Response Length": 681,
+          "Python Calls": 0,
+          "Python Errors": 0,
+          "turns": [
+            {
+              "type": "text",
+              "content": "We are given that:\n\n- A **hot dog** weighs **2 ounces**.\n- A **burger** weighs **5 ounces**.\n- A **pie** weighs **10 ounces**.\n- A **pizza** weighs **15 ounces**.\n- A **sandwich** weighs **3 ounces**.\n- **Noah** ate **8 burgers**.\n- **Jacob** eats **three fewer pies than Noah eats burgers**.\n- Jacob eats **half the number of pizzas as sandwiches**.\n- **Mason** eats **3 times as many hotdogs as the number of pies consumed by Jacob**.\n- Mason eats **1.5 times more hotdogs than sandwiches**.\n\nWe are to find the **total weight of the hotdogs that Mason ate**, in **ounces**.\n\n---\n\n### Step 1: Determine how many pies Jacob ate.\n\nJacob eats **three fewer pies than Noah eats burgers**.\n\nNoah ate **8 burgers**, so Jacob eats:\n\n$$\n\\text{Jacob's pies} = 8 - 3 = 5\n$$\n\n---\n\n### Step 2: Determine how many pizzas and sandwiches Jacob ate.\n\nWe are told:\n\n> \"Jacob eats half the number of pizzas as sandwiches.\"\n\nLet:\n- $ S $ = number of sandwiches Jacob ate\n- $ P $ = number of pizzas Jacob ate\n\nThen:\n\n$$\nP = \\frac{1}{2}S \\Rightarrow S = 2P\n$$\n\nSo the number of sandwiches is **twice** the number of pizzas.\n\nWe can choose any number for $ P $, say $ P = x $, then $ S = 2x $.  \nWe don\u2019t need to find the actual number of pizzas and sandwiches, since it\u2019s not needed to find Mason\u2019s hot dogs. So we'll just keep $ P = x $, $ S = 2x $ for now.\n\n---\n\n### Step 3: Determine how many hot dogs Mason ate.\n\nWe are told:\n\n> \"Mason eats 3 times as many hotdogs as the number of pies consumed by Jacob.\"\n\nJacob ate **5 pies**, so:\n\n$$\n\\text{Mason's hotdogs} = 3 \\times 5 = 15\n$$\n\nWe are also told:\n\n> \"Mason eats 1.5 times more hotdogs than sandwiches.\"\n\nLet:\n- $ M $ = number of hotdogs Mason ate\n- $ S $ = number of sandwiches Jacob ate\n\nFrom above, we have:\n\n$$\nM = 1.5 \\times S \\Rightarrow S = \\frac{2}{3}M\n$$\n\nWe already found $ M = 15 $, so:\n\n$$\nS = \\frac{2}{3} \\times 15 = 10\n$$\n\nSo Jacob ate **10 sandwiches**, which means he also ate **5 pizzas** (since $ P = \\frac{1}{2}S $).\n\n---\n\n### Step 4: Calculate the total weight of hotdogs Mason ate.\n\nEach hotdog weighs **2 ounces**, and Mason ate **15 hotdogs**, so:\n\n$$\n\\text{Weight of hotdogs} = 15 \\times 2 = \\boxed{30}\n$$\n\n---\n\n### \u2705 Final Answer:\n\n$$\n\\boxed{30}\n$$"
+            }
+          ],
+          "Duration": 19.36,
+          "model": "Qwen3-8B-Q4_K_M.gguf",
+          "mode": "tir",
+          "token_budget": 32768,
+          "tokens_remaining": 32087
+        }
+      ]
+    }
+  },
+  "final_answer": 30,
+  "selection_method": "early_stop",
+  "total_seconds": 34.7,
+  "is_correct": true
+}
