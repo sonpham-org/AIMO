@@ -1,0 +1,2694 @@
+{
+  "model": "qwen3-8b-16k:latest",
+  "n_samples": 12,
+  "max_turns": 16,
+  "temperature": 0.7,
+  "correct": 187,
+  "total": 298,
+  "accuracy": 0.6275,
+  "total_time_s": 339062.6,
+  "per_problem": [
+    {
+      "problem_id": "aime_1983_1",
+      "ground_truth": 60,
+      "default_answer": 60,
+      "correct": true,
+      "wall_time_s": 381.28,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1983_2",
+      "ground_truth": 15,
+      "default_answer": 15,
+      "correct": true,
+      "wall_time_s": 1084.7,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1983_3",
+      "ground_truth": 20,
+      "default_answer": 20,
+      "correct": true,
+      "wall_time_s": 498.24,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1983_4",
+      "ground_truth": 26,
+      "default_answer": 26,
+      "correct": true,
+      "wall_time_s": 898.68,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1983_5",
+      "ground_truth": 4,
+      "default_answer": 4,
+      "correct": true,
+      "wall_time_s": 407.43,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1983_6",
+      "ground_truth": 35,
+      "default_answer": 35,
+      "correct": true,
+      "wall_time_s": 513.54,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1983_7",
+      "ground_truth": 57,
+      "default_answer": 57,
+      "correct": true,
+      "wall_time_s": 824.29,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1983_8",
+      "ground_truth": 61,
+      "default_answer": 97,
+      "correct": false,
+      "wall_time_s": 447.99,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1983_9",
+      "ground_truth": 12,
+      "default_answer": 12,
+      "correct": true,
+      "wall_time_s": 478.22,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1983_10",
+      "ground_truth": 432,
+      "default_answer": 432,
+      "correct": true,
+      "wall_time_s": 443.58,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1983_11",
+      "ground_truth": 288,
+      "default_answer": 144,
+      "correct": false,
+      "wall_time_s": 951.69,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1983_12",
+      "ground_truth": 65,
+      "default_answer": 65,
+      "correct": true,
+      "wall_time_s": 730.21,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1983_13",
+      "ground_truth": 448,
+      "default_answer": 448,
+      "correct": true,
+      "wall_time_s": 431.46,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1983_14",
+      "ground_truth": 130,
+      "default_answer": 130,
+      "correct": true,
+      "wall_time_s": 1391.5,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1983_15",
+      "ground_truth": 175,
+      "default_answer": 175,
+      "correct": true,
+      "wall_time_s": 1514.92,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1984_1",
+      "ground_truth": 93,
+      "default_answer": 93,
+      "correct": true,
+      "wall_time_s": 1014.57,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1984_2",
+      "ground_truth": 592,
+      "default_answer": 592,
+      "correct": true,
+      "wall_time_s": 389.64,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1984_3",
+      "ground_truth": 144,
+      "default_answer": 144,
+      "correct": true,
+      "wall_time_s": 941.0,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1984_4",
+      "ground_truth": 649,
+      "default_answer": 649,
+      "correct": true,
+      "wall_time_s": 357.05,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1984_5",
+      "ground_truth": 512,
+      "default_answer": 512,
+      "correct": true,
+      "wall_time_s": 356.53,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1984_6",
+      "ground_truth": 24,
+      "default_answer": 24,
+      "correct": true,
+      "wall_time_s": 1300.13,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1984_7",
+      "ground_truth": 997,
+      "default_answer": 997,
+      "correct": true,
+      "wall_time_s": 402.88,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1984_8",
+      "ground_truth": 160,
+      "default_answer": 160,
+      "correct": true,
+      "wall_time_s": 423.75,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1984_9",
+      "ground_truth": 20,
+      "default_answer": 20,
+      "correct": true,
+      "wall_time_s": 481.19,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1984_10",
+      "ground_truth": 119,
+      "default_answer": 116,
+      "correct": false,
+      "wall_time_s": 751.75,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1984_11",
+      "ground_truth": 106,
+      "default_answer": 106,
+      "correct": true,
+      "wall_time_s": 516.14,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1984_12",
+      "ground_truth": 401,
+      "default_answer": 401,
+      "correct": true,
+      "wall_time_s": 498.08,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1984_13",
+      "ground_truth": 15,
+      "default_answer": 15,
+      "correct": true,
+      "wall_time_s": 1575.02,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1984_14",
+      "ground_truth": 38,
+      "default_answer": 38,
+      "correct": true,
+      "wall_time_s": 443.44,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1985_1",
+      "ground_truth": 384,
+      "default_answer": 384,
+      "correct": true,
+      "wall_time_s": 506.52,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1985_2",
+      "ground_truth": 26,
+      "default_answer": 26,
+      "correct": true,
+      "wall_time_s": 337.11,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1985_3",
+      "ground_truth": 198,
+      "default_answer": 198,
+      "correct": true,
+      "wall_time_s": 357.45,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1985_4",
+      "ground_truth": 32,
+      "default_answer": 1985,
+      "correct": false,
+      "wall_time_s": 2640.06,
+      "n_attempts": 12,
+      "n_valid_answers": 10
+    },
+    {
+      "problem_id": "aime_1985_5",
+      "ground_truth": 986,
+      "default_answer": 986,
+      "correct": true,
+      "wall_time_s": 372.28,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1985_6",
+      "ground_truth": 315,
+      "default_answer": 24,
+      "correct": false,
+      "wall_time_s": 1999.27,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1985_7",
+      "ground_truth": 757,
+      "default_answer": 757,
+      "correct": true,
+      "wall_time_s": 333.92,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1985_8",
+      "ground_truth": 61,
+      "default_answer": 61,
+      "correct": true,
+      "wall_time_s": 744.78,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1985_9",
+      "ground_truth": 49,
+      "default_answer": 49,
+      "correct": true,
+      "wall_time_s": 522.17,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1985_10",
+      "ground_truth": 600,
+      "default_answer": 666,
+      "correct": false,
+      "wall_time_s": 628.49,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1985_11",
+      "ground_truth": 85,
+      "default_answer": 85,
+      "correct": true,
+      "wall_time_s": 422.21,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1985_12",
+      "ground_truth": 182,
+      "default_answer": 182,
+      "correct": true,
+      "wall_time_s": 492.11,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1985_13",
+      "ground_truth": 401,
+      "default_answer": 401,
+      "correct": true,
+      "wall_time_s": 593.79,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1985_14",
+      "ground_truth": 25,
+      "default_answer": 25,
+      "correct": true,
+      "wall_time_s": 588.36,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1985_15",
+      "ground_truth": 864,
+      "default_answer": 864,
+      "correct": true,
+      "wall_time_s": 2324.65,
+      "n_attempts": 12,
+      "n_valid_answers": 10
+    },
+    {
+      "problem_id": "aime_1986_1",
+      "ground_truth": 337,
+      "default_answer": 337,
+      "correct": true,
+      "wall_time_s": 350.61,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1986_2",
+      "ground_truth": 104,
+      "default_answer": 104,
+      "correct": true,
+      "wall_time_s": 1178.6,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1986_3",
+      "ground_truth": 150,
+      "default_answer": 150,
+      "correct": true,
+      "wall_time_s": 356.41,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1986_5",
+      "ground_truth": 890,
+      "default_answer": 890,
+      "correct": true,
+      "wall_time_s": 425.37,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1986_6",
+      "ground_truth": 33,
+      "default_answer": 33,
+      "correct": true,
+      "wall_time_s": 366.88,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1986_7",
+      "ground_truth": 981,
+      "default_answer": 981,
+      "correct": true,
+      "wall_time_s": 369.62,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1986_8",
+      "ground_truth": 141,
+      "default_answer": 141,
+      "correct": true,
+      "wall_time_s": 422.55,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1986_9",
+      "ground_truth": 306,
+      "default_answer": 153,
+      "correct": false,
+      "wall_time_s": 2510.51,
+      "n_attempts": 12,
+      "n_valid_answers": 9
+    },
+    {
+      "problem_id": "aime_1986_10",
+      "ground_truth": 358,
+      "default_answer": 358,
+      "correct": true,
+      "wall_time_s": 1051.1,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1986_11",
+      "ground_truth": 816,
+      "default_answer": 816,
+      "correct": true,
+      "wall_time_s": 1118.45,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1986_12",
+      "ground_truth": 61,
+      "default_answer": 61,
+      "correct": true,
+      "wall_time_s": 1342.37,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1986_13",
+      "ground_truth": 560,
+      "default_answer": 560,
+      "correct": true,
+      "wall_time_s": 948.39,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1986_14",
+      "ground_truth": 750,
+      "default_answer": 750,
+      "correct": true,
+      "wall_time_s": 1477.23,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1986_15",
+      "ground_truth": 400,
+      "default_answer": 400,
+      "correct": true,
+      "wall_time_s": 1973.62,
+      "n_attempts": 12,
+      "n_valid_answers": 10
+    },
+    {
+      "problem_id": "aime_1987_1",
+      "ground_truth": 300,
+      "default_answer": 300,
+      "correct": true,
+      "wall_time_s": 427.25,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1987_2",
+      "ground_truth": 137,
+      "default_answer": 137,
+      "correct": true,
+      "wall_time_s": 384.96,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1987_3",
+      "ground_truth": 182,
+      "default_answer": 182,
+      "correct": true,
+      "wall_time_s": 523.63,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1987_4",
+      "ground_truth": 480,
+      "default_answer": 480,
+      "correct": true,
+      "wall_time_s": 515.26,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1987_5",
+      "ground_truth": 588,
+      "default_answer": 588,
+      "correct": true,
+      "wall_time_s": 392.0,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1987_6",
+      "ground_truth": 193,
+      "default_answer": 87,
+      "correct": false,
+      "wall_time_s": 1430.53,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1987_7",
+      "ground_truth": 70,
+      "default_answer": 70,
+      "correct": true,
+      "wall_time_s": 520.79,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1987_8",
+      "ground_truth": 112,
+      "default_answer": 112,
+      "correct": true,
+      "wall_time_s": 2136.31,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1987_9",
+      "ground_truth": 33,
+      "default_answer": 33,
+      "correct": true,
+      "wall_time_s": 570.57,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1987_10",
+      "ground_truth": 120,
+      "default_answer": 120,
+      "correct": true,
+      "wall_time_s": 610.89,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1987_11",
+      "ground_truth": 486,
+      "default_answer": 486,
+      "correct": true,
+      "wall_time_s": 631.49,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1987_12",
+      "ground_truth": 19,
+      "default_answer": 100,
+      "correct": false,
+      "wall_time_s": 471.42,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1987_14",
+      "ground_truth": 373,
+      "default_answer": 373,
+      "correct": true,
+      "wall_time_s": 3551.12,
+      "n_attempts": 12,
+      "n_valid_answers": 8
+    },
+    {
+      "problem_id": "aime_1987_15",
+      "ground_truth": 462,
+      "default_answer": 462,
+      "correct": true,
+      "wall_time_s": 1120.34,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1988_2",
+      "ground_truth": 169,
+      "default_answer": 169,
+      "correct": true,
+      "wall_time_s": 357.95,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1988_3",
+      "ground_truth": 27,
+      "default_answer": 27,
+      "correct": true,
+      "wall_time_s": 357.59,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1988_5",
+      "ground_truth": 634,
+      "default_answer": 634,
+      "correct": true,
+      "wall_time_s": 357.52,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1988_7",
+      "ground_truth": 110,
+      "default_answer": 110,
+      "correct": true,
+      "wall_time_s": 3628.47,
+      "n_attempts": 12,
+      "n_valid_answers": 7
+    },
+    {
+      "problem_id": "aime_1988_8",
+      "ground_truth": 364,
+      "default_answer": 2,
+      "correct": false,
+      "wall_time_s": 1309.57,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1988_9",
+      "ground_truth": 192,
+      "default_answer": 192,
+      "correct": true,
+      "wall_time_s": 499.74,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1988_10",
+      "ground_truth": 840,
+      "default_answer": 840,
+      "correct": true,
+      "wall_time_s": 464.74,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1988_13",
+      "ground_truth": 987,
+      "default_answer": 987,
+      "correct": true,
+      "wall_time_s": 1055.82,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1988_14",
+      "ground_truth": 84,
+      "default_answer": 84,
+      "correct": true,
+      "wall_time_s": 3001.12,
+      "n_attempts": 12,
+      "n_valid_answers": 8
+    },
+    {
+      "problem_id": "aime_1988_15",
+      "ground_truth": 704,
+      "default_answer": 256,
+      "correct": false,
+      "wall_time_s": 1023.07,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1989_1",
+      "ground_truth": 869,
+      "default_answer": 869,
+      "correct": true,
+      "wall_time_s": 359.43,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1989_2",
+      "ground_truth": 968,
+      "default_answer": 968,
+      "correct": true,
+      "wall_time_s": 348.39,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1989_4",
+      "ground_truth": 675,
+      "default_answer": 675,
+      "correct": true,
+      "wall_time_s": 392.98,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1989_5",
+      "ground_truth": 283,
+      "default_answer": 283,
+      "correct": true,
+      "wall_time_s": 362.55,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1989_7",
+      "ground_truth": 925,
+      "default_answer": 925,
+      "correct": true,
+      "wall_time_s": 435.45,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1989_8",
+      "ground_truth": 334,
+      "default_answer": 334,
+      "correct": true,
+      "wall_time_s": 503.62,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1989_9",
+      "ground_truth": 144,
+      "default_answer": 144,
+      "correct": true,
+      "wall_time_s": 402.58,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1989_11",
+      "ground_truth": 947,
+      "default_answer": 495,
+      "correct": false,
+      "wall_time_s": 619.86,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1989_13",
+      "ground_truth": 905,
+      "default_answer": 905,
+      "correct": true,
+      "wall_time_s": 701.04,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1990_1",
+      "ground_truth": 528,
+      "default_answer": 512,
+      "correct": false,
+      "wall_time_s": 341.73,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1990_2",
+      "ground_truth": 828,
+      "default_answer": 828,
+      "correct": true,
+      "wall_time_s": 1128.58,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1990_3",
+      "ground_truth": 117,
+      "default_answer": 117,
+      "correct": true,
+      "wall_time_s": 820.58,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1990_5",
+      "ground_truth": 432,
+      "default_answer": 432,
+      "correct": true,
+      "wall_time_s": 499.59,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1990_6",
+      "ground_truth": 840,
+      "default_answer": 840,
+      "correct": true,
+      "wall_time_s": 375.48,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1990_7",
+      "ground_truth": 89,
+      "default_answer": 89,
+      "correct": true,
+      "wall_time_s": 427.05,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1990_9",
+      "ground_truth": 73,
+      "default_answer": 73,
+      "correct": true,
+      "wall_time_s": 359.8,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1990_10",
+      "ground_truth": 144,
+      "default_answer": 144,
+      "correct": true,
+      "wall_time_s": 619.89,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1990_11",
+      "ground_truth": 23,
+      "default_answer": 7,
+      "correct": false,
+      "wall_time_s": 478.84,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1990_13",
+      "ground_truth": 184,
+      "default_answer": 184,
+      "correct": true,
+      "wall_time_s": 1130.76,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1990_14",
+      "ground_truth": 594,
+      "default_answer": 1014,
+      "correct": false,
+      "wall_time_s": 3409.71,
+      "n_attempts": 12,
+      "n_valid_answers": 9
+    },
+    {
+      "problem_id": "aime_1990_15",
+      "ground_truth": 20,
+      "default_answer": 20,
+      "correct": true,
+      "wall_time_s": 455.18,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1991_1",
+      "ground_truth": 146,
+      "default_answer": 146,
+      "correct": true,
+      "wall_time_s": 359.81,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1991_2",
+      "ground_truth": 840,
+      "default_answer": 840,
+      "correct": true,
+      "wall_time_s": 1386.86,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1991_4",
+      "ground_truth": 159,
+      "default_answer": 160,
+      "correct": false,
+      "wall_time_s": 693.54,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1991_5",
+      "ground_truth": 128,
+      "default_answer": 128,
+      "correct": true,
+      "wall_time_s": 650.26,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1991_8",
+      "ground_truth": 10,
+      "default_answer": 10,
+      "correct": true,
+      "wall_time_s": 457.34,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1991_9",
+      "ground_truth": 44,
+      "default_answer": 44,
+      "correct": true,
+      "wall_time_s": 1051.36,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1991_10",
+      "ground_truth": 532,
+      "default_answer": 532,
+      "correct": true,
+      "wall_time_s": 677.45,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1991_11",
+      "ground_truth": 135,
+      "default_answer": 21,
+      "correct": false,
+      "wall_time_s": 2096.08,
+      "n_attempts": 12,
+      "n_valid_answers": 10
+    },
+    {
+      "problem_id": "aime_1991_12",
+      "ground_truth": 677,
+      "default_answer": 677,
+      "correct": true,
+      "wall_time_s": 524.99,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1991_13",
+      "ground_truth": 990,
+      "default_answer": 990,
+      "correct": true,
+      "wall_time_s": 539.39,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1991_14",
+      "ground_truth": 384,
+      "default_answer": 384,
+      "correct": true,
+      "wall_time_s": 620.3,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1992_1",
+      "ground_truth": 400,
+      "default_answer": 400,
+      "correct": true,
+      "wall_time_s": 1088.08,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1992_2",
+      "ground_truth": 502,
+      "default_answer": 502,
+      "correct": true,
+      "wall_time_s": 417.43,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1992_3",
+      "ground_truth": 164,
+      "default_answer": 164,
+      "correct": true,
+      "wall_time_s": 370.57,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1992_4",
+      "ground_truth": 62,
+      "default_answer": 62,
+      "correct": true,
+      "wall_time_s": 1135.17,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1992_5",
+      "ground_truth": 660,
+      "default_answer": 264,
+      "correct": false,
+      "wall_time_s": 854.65,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1992_6",
+      "ground_truth": 156,
+      "default_answer": 156,
+      "correct": true,
+      "wall_time_s": 1002.06,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1992_7",
+      "ground_truth": 320,
+      "default_answer": 320,
+      "correct": true,
+      "wall_time_s": 633.97,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1992_8",
+      "ground_truth": 819,
+      "default_answer": 819,
+      "correct": true,
+      "wall_time_s": 1626.59,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1992_9",
+      "ground_truth": 164,
+      "default_answer": 164,
+      "correct": true,
+      "wall_time_s": 563.11,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1992_10",
+      "ground_truth": 572,
+      "default_answer": 572,
+      "correct": true,
+      "wall_time_s": 815.51,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1992_11",
+      "ground_truth": 945,
+      "default_answer": 945,
+      "correct": true,
+      "wall_time_s": 528.22,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1992_12",
+      "ground_truth": 792,
+      "default_answer": 792,
+      "correct": true,
+      "wall_time_s": 631.93,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1992_13",
+      "ground_truth": 820,
+      "default_answer": 820,
+      "correct": true,
+      "wall_time_s": 1151.74,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1992_14",
+      "ground_truth": 94,
+      "default_answer": 93,
+      "correct": false,
+      "wall_time_s": 459.18,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1992_15",
+      "ground_truth": 396,
+      "default_answer": 396,
+      "correct": true,
+      "wall_time_s": 500.67,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1993_1",
+      "ground_truth": 728,
+      "default_answer": 728,
+      "correct": true,
+      "wall_time_s": 490.03,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1993_2",
+      "ground_truth": 580,
+      "default_answer": 580,
+      "correct": true,
+      "wall_time_s": 2226.82,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1993_4",
+      "ground_truth": 870,
+      "default_answer": 870,
+      "correct": true,
+      "wall_time_s": 592.98,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1993_5",
+      "ground_truth": 763,
+      "default_answer": 763,
+      "correct": true,
+      "wall_time_s": 1083.16,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1993_6",
+      "ground_truth": 495,
+      "default_answer": 495,
+      "correct": true,
+      "wall_time_s": 967.44,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1993_7",
+      "ground_truth": 5,
+      "default_answer": 5,
+      "correct": true,
+      "wall_time_s": 809.64,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1993_8",
+      "ground_truth": 365,
+      "default_answer": 365,
+      "correct": true,
+      "wall_time_s": 502.22,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1993_9",
+      "ground_truth": 118,
+      "default_answer": 118,
+      "correct": true,
+      "wall_time_s": 978.82,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1993_10",
+      "ground_truth": 250,
+      "default_answer": 250,
+      "correct": true,
+      "wall_time_s": 1182.27,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1993_11",
+      "ground_truth": 93,
+      "default_answer": 93,
+      "correct": true,
+      "wall_time_s": 833.43,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1993_12",
+      "ground_truth": 344,
+      "default_answer": 344,
+      "correct": true,
+      "wall_time_s": 562.39,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1993_13",
+      "ground_truth": 163,
+      "default_answer": 163,
+      "correct": true,
+      "wall_time_s": 1603.27,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1993_14",
+      "ground_truth": 448,
+      "default_answer": 400,
+      "correct": false,
+      "wall_time_s": 1240.17,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1993_15",
+      "ground_truth": 997,
+      "default_answer": 997,
+      "correct": true,
+      "wall_time_s": 1243.3,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1994_1",
+      "ground_truth": 63,
+      "default_answer": 63,
+      "correct": true,
+      "wall_time_s": 627.45,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1994_2",
+      "ground_truth": 312,
+      "default_answer": 320,
+      "correct": false,
+      "wall_time_s": 828.56,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1994_8",
+      "ground_truth": 315,
+      "default_answer": 315,
+      "correct": true,
+      "wall_time_s": 1662.93,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1994_9",
+      "ground_truth": 394,
+      "default_answer": 9,
+      "correct": false,
+      "wall_time_s": 1838.33,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1994_10",
+      "ground_truth": 450,
+      "default_answer": 450,
+      "correct": true,
+      "wall_time_s": 688.02,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1994_11",
+      "ground_truth": 465,
+      "default_answer": 469,
+      "correct": false,
+      "wall_time_s": 1291.2,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1994_12",
+      "ground_truth": 702,
+      "default_answer": 312,
+      "correct": false,
+      "wall_time_s": 715.36,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1994_14",
+      "ground_truth": 71,
+      "default_answer": 199,
+      "correct": false,
+      "wall_time_s": 1769.31,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1994_15",
+      "ground_truth": 597,
+      "default_answer": 1947,
+      "correct": false,
+      "wall_time_s": 2544.13,
+      "n_attempts": 12,
+      "n_valid_answers": 9
+    },
+    {
+      "problem_id": "aime_1995_1",
+      "ground_truth": 255,
+      "default_answer": 85,
+      "correct": false,
+      "wall_time_s": 2387.05,
+      "n_attempts": 12,
+      "n_valid_answers": 10
+    },
+    {
+      "problem_id": "aime_1995_2",
+      "ground_truth": 25,
+      "default_answer": 25,
+      "correct": true,
+      "wall_time_s": 521.01,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1995_3",
+      "ground_truth": 67,
+      "default_answer": 2261,
+      "correct": false,
+      "wall_time_s": 390.15,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1995_4",
+      "ground_truth": 224,
+      "default_answer": 224,
+      "correct": true,
+      "wall_time_s": 658.81,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1995_5",
+      "ground_truth": 51,
+      "default_answer": 51,
+      "correct": true,
+      "wall_time_s": 577.99,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1995_6",
+      "ground_truth": 589,
+      "default_answer": 589,
+      "correct": true,
+      "wall_time_s": 685.8,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1995_8",
+      "ground_truth": 85,
+      "default_answer": 100,
+      "correct": false,
+      "wall_time_s": 500.07,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1995_9",
+      "ground_truth": 616,
+      "default_answer": 616,
+      "correct": true,
+      "wall_time_s": 1034.67,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1995_10",
+      "ground_truth": 215,
+      "default_answer": 155,
+      "correct": false,
+      "wall_time_s": 727.17,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1995_11",
+      "ground_truth": 40,
+      "default_answer": 41,
+      "correct": false,
+      "wall_time_s": 1703.76,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1995_12",
+      "ground_truth": 5,
+      "default_answer": 5,
+      "correct": true,
+      "wall_time_s": 1012.88,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1995_13",
+      "ground_truth": 400,
+      "default_answer": 400,
+      "correct": true,
+      "wall_time_s": 3547.91,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1995_14",
+      "ground_truth": 378,
+      "default_answer": 378,
+      "correct": true,
+      "wall_time_s": 1766.51,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1995_15",
+      "ground_truth": 37,
+      "default_answer": 37,
+      "correct": true,
+      "wall_time_s": 542.71,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1996_2",
+      "ground_truth": 340,
+      "default_answer": 340,
+      "correct": true,
+      "wall_time_s": 399.94,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1996_3",
+      "ground_truth": 44,
+      "default_answer": 44,
+      "correct": true,
+      "wall_time_s": 337.77,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1996_4",
+      "ground_truth": 166,
+      "default_answer": 166,
+      "correct": true,
+      "wall_time_s": 466.34,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1996_5",
+      "ground_truth": 23,
+      "default_answer": 23,
+      "correct": true,
+      "wall_time_s": 1055.12,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1996_6",
+      "ground_truth": 49,
+      "default_answer": 49,
+      "correct": true,
+      "wall_time_s": 662.66,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1996_7",
+      "ground_truth": 300,
+      "default_answer": 300,
+      "correct": true,
+      "wall_time_s": 459.83,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1996_8",
+      "ground_truth": 799,
+      "default_answer": 840,
+      "correct": false,
+      "wall_time_s": 663.36,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1996_9",
+      "ground_truth": 342,
+      "default_answer": 1024,
+      "correct": false,
+      "wall_time_s": 788.29,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1996_10",
+      "ground_truth": 159,
+      "default_answer": 159,
+      "correct": true,
+      "wall_time_s": 561.16,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1996_11",
+      "ground_truth": 276,
+      "default_answer": 276,
+      "correct": true,
+      "wall_time_s": 769.61,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1996_12",
+      "ground_truth": 58,
+      "default_answer": 58,
+      "correct": true,
+      "wall_time_s": 424.55,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1996_13",
+      "ground_truth": 65,
+      "default_answer": 3,
+      "correct": false,
+      "wall_time_s": 950.21,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1996_14",
+      "ground_truth": 768,
+      "default_answer": 768,
+      "correct": true,
+      "wall_time_s": 358.87,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1996_15",
+      "ground_truth": 777,
+      "default_answer": 777,
+      "correct": true,
+      "wall_time_s": 1226.8,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1997_1",
+      "ground_truth": 750,
+      "default_answer": 750,
+      "correct": true,
+      "wall_time_s": 422.68,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1997_2",
+      "ground_truth": 125,
+      "default_answer": 125,
+      "correct": true,
+      "wall_time_s": 362.15,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1997_3",
+      "ground_truth": 126,
+      "default_answer": 126,
+      "correct": true,
+      "wall_time_s": 644.58,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1997_4",
+      "ground_truth": 17,
+      "default_answer": 17,
+      "correct": true,
+      "wall_time_s": 567.22,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1997_5",
+      "ground_truth": 417,
+      "default_answer": 417,
+      "correct": true,
+      "wall_time_s": 733.76,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1997_6",
+      "ground_truth": 42,
+      "default_answer": 6,
+      "correct": false,
+      "wall_time_s": 1133.52,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1997_7",
+      "ground_truth": 198,
+      "default_answer": 198,
+      "correct": true,
+      "wall_time_s": 471.22,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1997_8",
+      "ground_truth": 90,
+      "default_answer": 90,
+      "correct": true,
+      "wall_time_s": 614.33,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1997_9",
+      "ground_truth": 233,
+      "default_answer": 233,
+      "correct": true,
+      "wall_time_s": 1547.13,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1997_10",
+      "ground_truth": 117,
+      "default_answer": 117,
+      "correct": true,
+      "wall_time_s": 688.01,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1997_11",
+      "ground_truth": 241,
+      "default_answer": 241,
+      "correct": true,
+      "wall_time_s": 433.05,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1997_12",
+      "ground_truth": 58,
+      "default_answer": 58,
+      "correct": true,
+      "wall_time_s": 1699.08,
+      "n_attempts": 12,
+      "n_valid_answers": 10
+    },
+    {
+      "problem_id": "aime_1997_14",
+      "ground_truth": 582,
+      "default_answer": 582,
+      "correct": true,
+      "wall_time_s": 3870.32,
+      "n_attempts": 12,
+      "n_valid_answers": 7
+    },
+    {
+      "problem_id": "aime_1997_15",
+      "ground_truth": 554,
+      "default_answer": 34,
+      "correct": false,
+      "wall_time_s": 2161.03,
+      "n_attempts": 12,
+      "n_valid_answers": 10
+    },
+    {
+      "problem_id": "aime_1998_1",
+      "ground_truth": 25,
+      "default_answer": 1,
+      "correct": false,
+      "wall_time_s": 571.73,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1998_2",
+      "ground_truth": 480,
+      "default_answer": 480,
+      "correct": true,
+      "wall_time_s": 542.18,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1998_3",
+      "ground_truth": 800,
+      "default_answer": 800,
+      "correct": true,
+      "wall_time_s": 2119.2,
+      "n_attempts": 12,
+      "n_valid_answers": 10
+    },
+    {
+      "problem_id": "aime_1998_4",
+      "ground_truth": 17,
+      "default_answer": 17,
+      "correct": true,
+      "wall_time_s": 475.84,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1998_5",
+      "ground_truth": 40,
+      "default_answer": 40,
+      "correct": true,
+      "wall_time_s": 523.62,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1998_6",
+      "ground_truth": 308,
+      "default_answer": 308,
+      "correct": true,
+      "wall_time_s": 1328.86,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1998_7",
+      "ground_truth": 196,
+      "default_answer": 196,
+      "correct": true,
+      "wall_time_s": 427.65,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1998_8",
+      "ground_truth": 618,
+      "default_answer": 618,
+      "correct": true,
+      "wall_time_s": 1224.8,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1998_9",
+      "ground_truth": 87,
+      "default_answer": 87,
+      "correct": true,
+      "wall_time_s": 393.4,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1998_10",
+      "ground_truth": 152,
+      "default_answer": 152,
+      "correct": true,
+      "wall_time_s": 6616.59,
+      "n_attempts": 12,
+      "n_valid_answers": 10
+    },
+    {
+      "problem_id": "aime_1998_11",
+      "ground_truth": 525,
+      "default_answer": 525,
+      "correct": true,
+      "wall_time_s": 2794.11,
+      "n_attempts": 12,
+      "n_valid_answers": 9
+    },
+    {
+      "problem_id": "aime_1998_12",
+      "ground_truth": 83,
+      "default_answer": 83,
+      "correct": true,
+      "wall_time_s": 913.19,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1998_13",
+      "ground_truth": 368,
+      "default_answer": 2528,
+      "correct": false,
+      "wall_time_s": 1811.2,
+      "n_attempts": 12,
+      "n_valid_answers": 10
+    },
+    {
+      "problem_id": "aime_1998_14",
+      "ground_truth": 130,
+      "default_answer": 98,
+      "correct": false,
+      "wall_time_s": 853.03,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1998_15",
+      "ground_truth": 761,
+      "default_answer": 761,
+      "correct": true,
+      "wall_time_s": 890.89,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1999_1",
+      "ground_truth": 29,
+      "default_answer": 29,
+      "correct": true,
+      "wall_time_s": 522.06,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1999_2",
+      "ground_truth": 118,
+      "default_answer": 118,
+      "correct": true,
+      "wall_time_s": 519.3,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1999_3",
+      "ground_truth": 38,
+      "default_answer": 38,
+      "correct": true,
+      "wall_time_s": 493.8,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1999_4",
+      "ground_truth": 185,
+      "default_answer": 142,
+      "correct": false,
+      "wall_time_s": 5236.43,
+      "n_attempts": 12,
+      "n_valid_answers": 5
+    },
+    {
+      "problem_id": "aime_1999_5",
+      "ground_truth": 223,
+      "default_answer": 223,
+      "correct": true,
+      "wall_time_s": 498.87,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1999_6",
+      "ground_truth": 314,
+      "default_answer": 300,
+      "correct": false,
+      "wall_time_s": 1116.29,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_1999_7",
+      "ground_truth": 650,
+      "default_answer": 650,
+      "correct": true,
+      "wall_time_s": 636.19,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1999_8",
+      "ground_truth": 25,
+      "default_answer": 25,
+      "correct": true,
+      "wall_time_s": 958.27,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1999_9",
+      "ground_truth": 259,
+      "default_answer": 259,
+      "correct": true,
+      "wall_time_s": 360.27,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1999_10",
+      "ground_truth": 489,
+      "default_answer": 489,
+      "correct": true,
+      "wall_time_s": 980.1,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1999_11",
+      "ground_truth": 177,
+      "default_answer": 177,
+      "correct": true,
+      "wall_time_s": 392.85,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1999_12",
+      "ground_truth": 345,
+      "default_answer": 345,
+      "correct": true,
+      "wall_time_s": 476.67,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1999_13",
+      "ground_truth": 742,
+      "default_answer": 742,
+      "correct": true,
+      "wall_time_s": 525.54,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1999_14",
+      "ground_truth": 463,
+      "default_answer": 47,
+      "correct": false,
+      "wall_time_s": 627.59,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_1999_15",
+      "ground_truth": 408,
+      "default_answer": 408,
+      "correct": true,
+      "wall_time_s": 3045.62,
+      "n_attempts": 12,
+      "n_valid_answers": 8
+    },
+    {
+      "problem_id": "aime_2000_1",
+      "ground_truth": 8,
+      "default_answer": 8,
+      "correct": true,
+      "wall_time_s": 648.29,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2000_2",
+      "ground_truth": 98,
+      "default_answer": 21,
+      "correct": false,
+      "wall_time_s": 426.5,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2000_3",
+      "ground_truth": 758,
+      "default_answer": 667,
+      "correct": false,
+      "wall_time_s": 1012.96,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_2000_4",
+      "ground_truth": 180,
+      "default_answer": 260,
+      "correct": false,
+      "wall_time_s": 873.23,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2000_5",
+      "ground_truth": 376,
+      "default_answer": 26,
+      "correct": false,
+      "wall_time_s": 552.36,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2000_6",
+      "ground_truth": 181,
+      "default_answer": 997,
+      "correct": false,
+      "wall_time_s": 579.87,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2000_7",
+      "ground_truth": 5,
+      "default_answer": 5,
+      "correct": true,
+      "wall_time_s": 360.27,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2000_8",
+      "ground_truth": 110,
+      "default_answer": 52,
+      "correct": false,
+      "wall_time_s": 641.67,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2000_9",
+      "ground_truth": 0,
+      "default_answer": 25,
+      "correct": false,
+      "wall_time_s": 426.72,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2000_10",
+      "ground_truth": 647,
+      "default_answer": 173,
+      "correct": false,
+      "wall_time_s": 392.89,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2000_11",
+      "ground_truth": 131,
+      "default_answer": 31,
+      "correct": false,
+      "wall_time_s": 936.94,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2000_12",
+      "ground_truth": 118,
+      "default_answer": 24,
+      "correct": false,
+      "wall_time_s": 881.97,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2000_13",
+      "ground_truth": 200,
+      "default_answer": 101,
+      "correct": false,
+      "wall_time_s": 797.95,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2000_14",
+      "ground_truth": 495,
+      "default_answer": 571,
+      "correct": false,
+      "wall_time_s": 975.77,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2000_15",
+      "ground_truth": 927,
+      "default_answer": 1000,
+      "correct": false,
+      "wall_time_s": 2442.82,
+      "n_attempts": 12,
+      "n_valid_answers": 10
+    },
+    {
+      "problem_id": "aime_2001_1",
+      "ground_truth": 816,
+      "default_answer": 630,
+      "correct": false,
+      "wall_time_s": 545.29,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2001_2",
+      "ground_truth": 298,
+      "default_answer": 651,
+      "correct": false,
+      "wall_time_s": 360.34,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2001_3",
+      "ground_truth": 898,
+      "default_answer": 500,
+      "correct": false,
+      "wall_time_s": 4201.11,
+      "n_attempts": 12,
+      "n_valid_answers": 7
+    },
+    {
+      "problem_id": "aime_2001_4",
+      "ground_truth": 67,
+      "default_answer": 291,
+      "correct": false,
+      "wall_time_s": 658.81,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2001_5",
+      "ground_truth": 253,
+      "default_answer": 937,
+      "correct": false,
+      "wall_time_s": 479.96,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2001_6",
+      "ground_truth": 251,
+      "default_answer": 79,
+      "correct": false,
+      "wall_time_s": 460.25,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2001_7",
+      "ground_truth": 725,
+      "default_answer": 923,
+      "correct": false,
+      "wall_time_s": 885.2,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2001_8",
+      "ground_truth": 429,
+      "default_answer": 315,
+      "correct": false,
+      "wall_time_s": 796.86,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2001_9",
+      "ground_truth": 929,
+      "default_answer": 61,
+      "correct": false,
+      "wall_time_s": 929.2,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2001_10",
+      "ground_truth": 784,
+      "default_answer": 997,
+      "correct": false,
+      "wall_time_s": 509.47,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2001_11",
+      "ground_truth": 341,
+      "default_answer": 149,
+      "correct": false,
+      "wall_time_s": 597.55,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2001_12",
+      "ground_truth": 101,
+      "default_answer": 5,
+      "correct": false,
+      "wall_time_s": 459.42,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2001_13",
+      "ground_truth": 69,
+      "default_answer": 174,
+      "correct": false,
+      "wall_time_s": 1860.65,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_2001_14",
+      "ground_truth": 840,
+      "default_answer": 351,
+      "correct": false,
+      "wall_time_s": 660.1,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2001_15",
+      "ground_truth": 417,
+      "default_answer": 281,
+      "correct": false,
+      "wall_time_s": 1373.35,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_2002_1",
+      "ground_truth": 9,
+      "default_answer": 59,
+      "correct": false,
+      "wall_time_s": 393.0,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2002_2",
+      "ground_truth": 294,
+      "default_answer": 154,
+      "correct": false,
+      "wall_time_s": 1266.24,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_2002_3",
+      "ground_truth": 111,
+      "default_answer": 25,
+      "correct": false,
+      "wall_time_s": 729.94,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2002_4",
+      "ground_truth": 803,
+      "default_answer": 840,
+      "correct": false,
+      "wall_time_s": 425.62,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2002_5",
+      "ground_truth": 42,
+      "default_answer": 72,
+      "correct": false,
+      "wall_time_s": 884.96,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2002_6",
+      "ground_truth": 521,
+      "default_answer": 12,
+      "correct": false,
+      "wall_time_s": 361.41,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2002_8",
+      "ground_truth": 49,
+      "default_answer": 130,
+      "correct": false,
+      "wall_time_s": 698.72,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2002_9",
+      "ground_truth": 501,
+      "default_answer": 757,
+      "correct": false,
+      "wall_time_s": 1196.96,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2002_10",
+      "ground_truth": 900,
+      "default_answer": 148,
+      "correct": false,
+      "wall_time_s": 1315.88,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2002_11",
+      "ground_truth": 518,
+      "default_answer": 230,
+      "correct": false,
+      "wall_time_s": 2790.05,
+      "n_attempts": 12,
+      "n_valid_answers": 9
+    },
+    {
+      "problem_id": "aime_2002_12",
+      "ground_truth": 660,
+      "default_answer": 269,
+      "correct": false,
+      "wall_time_s": 5165.04,
+      "n_attempts": 12,
+      "n_valid_answers": 5
+    },
+    {
+      "problem_id": "aime_2002_13",
+      "ground_truth": 901,
+      "default_answer": 63,
+      "correct": false,
+      "wall_time_s": 1087.56,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2002_14",
+      "ground_truth": 98,
+      "default_answer": 30,
+      "correct": false,
+      "wall_time_s": 867.14,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2002_15",
+      "ground_truth": 282,
+      "default_answer": 163,
+      "correct": false,
+      "wall_time_s": 3124.22,
+      "n_attempts": 12,
+      "n_valid_answers": 8
+    },
+    {
+      "problem_id": "aime_2003_2",
+      "ground_truth": 120,
+      "default_answer": 301,
+      "correct": false,
+      "wall_time_s": 407.24,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2003_3",
+      "ground_truth": 192,
+      "default_answer": 484,
+      "correct": false,
+      "wall_time_s": 425.99,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2003_4",
+      "ground_truth": 28,
+      "default_answer": 12,
+      "correct": false,
+      "wall_time_s": 451.65,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2003_5",
+      "ground_truth": 216,
+      "default_answer": 505,
+      "correct": false,
+      "wall_time_s": 439.82,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2003_6",
+      "ground_truth": 112,
+      "default_answer": 348,
+      "correct": false,
+      "wall_time_s": 1644.54,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "aime_2003_7",
+      "ground_truth": 400,
+      "default_answer": 380,
+      "correct": false,
+      "wall_time_s": 469.76,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2003_8",
+      "ground_truth": 348,
+      "default_answer": 129,
+      "correct": false,
+      "wall_time_s": 1192.87,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2003_9",
+      "ground_truth": 6,
+      "default_answer": 615,
+      "correct": false,
+      "wall_time_s": 524.89,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2003_10",
+      "ground_truth": 156,
+      "default_answer": 83,
+      "correct": false,
+      "wall_time_s": 790.98,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2003_11",
+      "ground_truth": 578,
+      "default_answer": 182,
+      "correct": false,
+      "wall_time_s": 1039.48,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2003_12",
+      "ground_truth": 134,
+      "default_answer": 777,
+      "correct": false,
+      "wall_time_s": 501.8,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2003_13",
+      "ground_truth": 683,
+      "default_answer": 155,
+      "correct": false,
+      "wall_time_s": 1183.41,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2003_14",
+      "ground_truth": 51,
+      "default_answer": 127,
+      "correct": false,
+      "wall_time_s": 404.26,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2003_15",
+      "ground_truth": 289,
+      "default_answer": 289,
+      "correct": true,
+      "wall_time_s": 1853.64,
+      "n_attempts": 12,
+      "n_valid_answers": 10
+    },
+    {
+      "problem_id": "aime_2003_1",
+      "ground_truth": 336,
+      "default_answer": 336,
+      "correct": true,
+      "wall_time_s": 845.45,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2004_1",
+      "ground_truth": 592,
+      "default_answer": 217,
+      "correct": false,
+      "wall_time_s": 369.45,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2004_2",
+      "ground_truth": 441,
+      "default_answer": 201,
+      "correct": false,
+      "wall_time_s": 479.98,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2004_3",
+      "ground_truth": 384,
+      "default_answer": 241,
+      "correct": false,
+      "wall_time_s": 356.62,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2004_4",
+      "ground_truth": 927,
+      "default_answer": 314,
+      "correct": false,
+      "wall_time_s": 3223.53,
+      "n_attempts": 12,
+      "n_valid_answers": 8
+    },
+    {
+      "problem_id": "aime_2004_5",
+      "ground_truth": 766,
+      "default_answer": 849,
+      "correct": false,
+      "wall_time_s": 867.62,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2004_6",
+      "ground_truth": 408,
+      "default_answer": 882,
+      "correct": false,
+      "wall_time_s": 1504.5,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2004_7",
+      "ground_truth": 293,
+      "default_answer": 588,
+      "correct": false,
+      "wall_time_s": 388.92,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2004_9",
+      "ground_truth": 973,
+      "default_answer": 13,
+      "correct": false,
+      "wall_time_s": 10128.26,
+      "n_attempts": 12,
+      "n_valid_answers": 6
+    },
+    {
+      "problem_id": "aime_2004_10",
+      "ground_truth": 913,
+      "default_answer": 63,
+      "correct": false,
+      "wall_time_s": 6831.56,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2004_11",
+      "ground_truth": 625,
+      "default_answer": 512,
+      "correct": false,
+      "wall_time_s": 5109.18,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2004_12",
+      "ground_truth": 134,
+      "default_answer": 41,
+      "correct": false,
+      "wall_time_s": 5614.27,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "aime_2004_13",
+      "ground_truth": 484,
+      "default_answer": 35,
+      "correct": false,
+      "wall_time_s": 7944.16,
+      "n_attempts": 12,
+      "n_valid_answers": 9
+    },
+    {
+      "problem_id": "aime_2004_14",
+      "ground_truth": 108,
+      "default_answer": 362,
+      "correct": false,
+      "wall_time_s": 9104.14,
+      "n_attempts": 12,
+      "n_valid_answers": 9
+    },
+    {
+      "problem_id": "aime_2004_15",
+      "ground_truth": 593,
+      "default_answer": 2,
+      "correct": false,
+      "wall_time_s": 9345.82,
+      "n_attempts": 12,
+      "n_valid_answers": 9
+    },
+    {
+      "problem_id": "aime_2004_8",
+      "ground_truth": 54,
+      "default_answer": 54,
+      "correct": true,
+      "wall_time_s": 6341.93,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    }
+  ]
+}

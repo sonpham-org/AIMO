@@ -1,0 +1,102 @@
+{
+  "model": "Qwen3-8B",
+  "n_samples": 12,
+  "max_turns": 16,
+  "temperature": 0.7,
+  "correct": 5,
+  "total": 10,
+  "accuracy": 0.5,
+  "total_time_s": 32370.2,
+  "per_problem": [
+    {
+      "problem_id": "0e644e",
+      "ground_truth": 336,
+      "default_answer": 2730,
+      "correct": false,
+      "wall_time_s": 4539.25,
+      "n_attempts": 12,
+      "n_valid_answers": 10
+    },
+    {
+      "problem_id": "26de63",
+      "ground_truth": 32951,
+      "default_answer": 32951,
+      "correct": true,
+      "wall_time_s": 2256.28,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "424e18",
+      "ground_truth": 21818,
+      "default_answer": 62140,
+      "correct": false,
+      "wall_time_s": 2903.41,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "42d360",
+      "ground_truth": 32193,
+      "default_answer": 32193,
+      "correct": true,
+      "wall_time_s": 3267.6,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "641659",
+      "ground_truth": 57447,
+      "default_answer": 512,
+      "correct": false,
+      "wall_time_s": 1896.41,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "86e8e5",
+      "ground_truth": 8687,
+      "default_answer": 4,
+      "correct": false,
+      "wall_time_s": 6355.2,
+      "n_attempts": 12,
+      "n_valid_answers": 4
+    },
+    {
+      "problem_id": "92ba6a",
+      "ground_truth": 50,
+      "default_answer": 50,
+      "correct": true,
+      "wall_time_s": 1808.25,
+      "n_attempts": 12,
+      "n_valid_answers": 11
+    },
+    {
+      "problem_id": "9c1c5f",
+      "ground_truth": 580,
+      "default_answer": 580,
+      "correct": true,
+      "wall_time_s": 3343.86,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "a295e9",
+      "ground_truth": 520,
+      "default_answer": 520,
+      "correct": true,
+      "wall_time_s": 3210.37,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    },
+    {
+      "problem_id": "dd7f5e",
+      "ground_truth": 160,
+      "default_answer": 126,
+      "correct": false,
+      "wall_time_s": 2788.28,
+      "n_attempts": 12,
+      "n_valid_answers": 12
+    }
+  ]
+}
